@@ -1,0 +1,19 @@
+# depslib dependency file v1.0
+1398459243 source:c:\users\jose\desktop\programacion\ncurses\main.cpp
+	<curses.h>
+
+1398375536 source:c:\users\jose\desktop\programacion\ncurses\untitled1.c
+	<curses.h>
+
+1216138406 c:\codeblocks\pdcurs34\curses.h
+	<stdarg.h>
+	<stddef.h>
+	<stdio.h>
+	<wchar.h>
+
+1398816884 source:c:\users\jose\desktop\programacion\ncurses - copia\main.cpp
+	<curses.h>
+
+1398824512 source:c:\users\jose\documents\github\proyecto smx\main.cpp
+	<curses.h>
+
