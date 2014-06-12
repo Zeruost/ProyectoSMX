@@ -58,27 +58,65 @@ void menu(){
     }
     clear();
 }
-void balas(int x, int y){  //Falta ajustarlo para q dispare junto donde esta el cursor.
-    marco();
+void balaarriba(int x, int y){
     int ch;
-    ch = getch();
     bool disparo=true;
-    while (disparo)
-    {
-
+            do{
             halfdelay(1);
-            mvaddch(y,x, ACS_UARROW);
+            mvaddch(y, x, ' ');
+            mvaddch(y-1,x, ACS_UARROW);
             y--;
             refresh();
-            ch=getch();
-    }
+            ch = getch();
+            mvprintw(4, x, " ");
+            }while(disparo && y>4);
+}
+void balaizquierda(int x, int y){
+    int ch;
+    bool disparo=true;
+            do{
+            halfdelay(1);
+            mvaddch(y, x, ' ');
+            mvaddch(y,x-1, ACS_LARROW);
+            x--;
+            refresh();
+            ch = getch();
+            mvprintw(y, 4, " ");
+            }while(disparo && x>4);
+
+}
+void baladerecha(int x, int y){
+    int ch;
+    bool disparo=true;
+            do{
+            halfdelay(1);
+            mvaddch(y, x, ' ');
+            mvaddch(y,x+1, ACS_RARROW);
+            x++;
+            refresh();
+            ch = getch();
+            mvprintw(y, 75, " ");
+            }while(disparo && x<75);
+}
+void balaabajo(int x, int y){
+    int ch;
+    bool disparo=true;
+            do{
+            halfdelay(1);
+            mvaddch(y, x, ' ');
+            mvaddch(y+1,x, ACS_DARROW);
+            y++;
+            refresh();
+            ch = getch();
+            mvprintw(20, x, " ");
+            }while(disparo && y<20);
 }
 void juego(){
     marco();
     int ch;
     int x = 35;
     int y = 13;
-
+    bool disparo=true;
     while (1)
     {
         mvprintw(2,34,"Y: %d",y);
@@ -90,7 +128,7 @@ void juego(){
             y++;
             mvprintw(y, x, "v");
         }
-        if (ch == KEY_UP && y>4)
+            if (ch == KEY_UP && y>4)
         {
             mvprintw(y, x, " ");
             y--;
@@ -107,9 +145,18 @@ void juego(){
             mvprintw(y, x, " ");
             x++;
             mvprintw(y, x, ">");
+        }                                //Al mantener presionada la tecla, la bala avanza mas rapido.
+        if(ch == 'd'){                   // Para poder disparar las teclas son d,s,a,w.
+            baladerecha(x, y);
         }
-        if(ch == ' '){
-            balas(y,x);
+        if(ch == 's'){
+            balaabajo(x, y);
+        }
+        if(ch == 'a'){
+            balaizquierda(x, y);
+        }
+        if(ch == 'w'){
+            balaarriba(x, y);
         }
         refresh();
     }
