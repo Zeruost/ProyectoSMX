@@ -161,6 +161,15 @@ void juego(){
         refresh();
     }
 }
+void enemigos(int i){
+
+    srand(time(NULL));
+    for(int r=0;r<i*2;r++)
+    {
+            mvprintw((rand()%17)+4, (rand()%72)+4, "X");
+    }
+}
+
 int main()
 {
     initscr();
@@ -170,8 +179,11 @@ int main()
     nodelay(stdscr,1);
     //Funciones
     menu();
-    juego();
 
+    //Aca se podria poner un contador de nivel onda nivel = 1 y con ++ al final para usarlo en la funcion de
+    //creacion de enemigos, haciendo un ciclo de enemigos y juego
+    enemigos(1);               //variable es nivel en que se encuentra uno, por ahora 1
+    juego();
     endwin();
     return 0;
 }
