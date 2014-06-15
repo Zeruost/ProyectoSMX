@@ -63,88 +63,119 @@ void balaarriba(int x, int y){
     bool disparo=true;
             do{
             halfdelay(1);
-            mvaddch(y, x, ' ');
-            mvaddch(y-1,x, ACS_UARROW);
+            mvaddch(y-2, x+1, ' ');
+            mvaddch(y-3,x+1, ACS_UARROW);
             y--;
             refresh();
             ch = getch();
-            mvprintw(4, x, " ");
-            }while(disparo && y>4);
+            mvaddch(4, x+1, ' ');
+            mvaddch(2, x+1, ' ');
+            }while(disparo && y>6);
 }
 void balaizquierda(int x, int y){
     int ch;
     bool disparo=true;
             do{
             halfdelay(1);
-            mvaddch(y, x, ' ');
-            mvaddch(y,x-1, ACS_LARROW);
+            mvaddch(y, x-1, ' ');
+            mvaddch(y,x-2, ACS_LARROW);
             x--;
             refresh();
             ch = getch();
-            mvprintw(y, 4, " ");
-            }while(disparo && x>4);
-
+            mvaddch(y, 4, ' ');
+            mvaddch(y, 2, ' ');
+            }while(disparo && x>5);
 }
 void baladerecha(int x, int y){
     int ch;
     bool disparo=true;
             do{
             halfdelay(1);
-            mvaddch(y, x, ' ');
-            mvaddch(y,x+1, ACS_RARROW);
+            mvaddch(y, x+3, ' ');
+            mvaddch(y,x+4, ACS_RARROW);
             x++;
             refresh();
             ch = getch();
-            mvprintw(y, 75, " ");
-            }while(disparo && x<75);
+            mvaddch(y, 75, ' ');
+            mvaddch(y, 77, ' ');
+            }while(disparo && x<72);
 }
 void balaabajo(int x, int y){
     int ch;
     bool disparo=true;
             do{
             halfdelay(1);
-            mvaddch(y, x, ' ');
-            mvaddch(y+1,x, ACS_DARROW);
+            mvaddch(y+2, x+1, ' ');
+            mvaddch(y+3,x+1, ACS_DARROW);
             y++;
             refresh();
             ch = getch();
-            mvprintw(20, x, " ");
-            }while(disparo && y<20);
+            mvaddch(20, x+1, ' ');
+            mvaddch(22, x+1, ' ');
+            }while(disparo && y<18);
 }
 void juego(){
     marco();
     int ch;
     int x = 35;
     int y = 13;
-    bool disparo=true;
     while (1)
     {
+        marco();
         mvprintw(2,34,"Y: %d",y);
         mvprintw(2,40,"X: %d",x);
         ch = getch();
-        if (ch == KEY_DOWN && y<20)
+        if (ch == KEY_DOWN && y<19)
         {
-            mvprintw(y, x, " ");
+            mvaddch(y, x, ' ');              //Nuevo cursor
+            mvaddch(y, x+1, ' ');
+            mvaddch(y, x+2, ' ');
+            mvaddch(y+1, x+1, ' ');
+            clear();
             y++;
-            mvprintw(y, x, "v");
+            mvaddch(y,x,ACS_DIAMOND);
+            mvaddch(y,x+1,ACS_DIAMOND);
+            mvaddch(y,x+2,ACS_DIAMOND);
+            mvaddch(y+1, x+1,ACS_DIAMOND);
         }
-            if (ch == KEY_UP && y>4)
+            if (ch == KEY_UP && y>5)
         {
-            mvprintw(y, x, " ");
+            mvaddch(y, x, ' ');
+            mvaddch(y, x+1, ' ');
+            mvaddch(y, x+2, ' ');
+            mvaddch(y-1, x+1, ' ');
+            clear();
             y--;
-            mvprintw(y, x, "^");
+            mvaddch(y,x,ACS_DIAMOND);
+            mvaddch(y,x+1,ACS_DIAMOND);
+            mvaddch(y,x+2,ACS_DIAMOND);
+            mvaddch(y-1,x+1,ACS_DIAMOND);
         }
         if (ch == KEY_LEFT && x>4)
         {
-            mvprintw(y, x, " ");
+            mvaddch(y-1,x+1,' ');
+            mvaddch(y,x+1,' ');
+            mvaddch(y+1,x+1,' ');
+            mvaddch(y,x,' ');
+            clear();
             x--;
-            mvprintw(y, x, "<");
+            mvaddch(y-1,x+1,ACS_DIAMOND);
+            mvaddch(y,x+1,ACS_DIAMOND);
+            mvaddch(y+1,x+1,ACS_DIAMOND);
+            mvaddch(y,x,ACS_DIAMOND);
         }
-        if (ch == KEY_RIGHT && x<75)
+        if (ch == KEY_RIGHT && x<73)
         {
-            mvprintw(y, x, " ");
+            mvaddch(y-1,x+1,' ');
+            mvaddch(y,x+1,' ');
+            mvaddch(y+1,x+1,' ');
+            mvaddch(y,x+2,' ');
+            clear();
             x++;
-            mvprintw(y, x, ">");
+            mvaddch(y-1,x+1,ACS_DIAMOND);
+            mvaddch(y,x+1,ACS_DIAMOND);
+            mvaddch(y+1,x+1,ACS_DIAMOND);
+            mvaddch(y,x+2,ACS_DIAMOND);
         }                                //Al mantener presionada la tecla, la bala avanza mas rapido.
         if(ch == 'd'){                   // Para poder disparar las teclas son d,s,a,w.
             baladerecha(x, y);
@@ -157,6 +188,9 @@ void juego(){
         }
         if(ch == 'w'){
             balaarriba(x, y);
+        }
+        if(ch == 27){              //ESCAPE para volver al menu.
+            menu();
         }
         refresh();
     }

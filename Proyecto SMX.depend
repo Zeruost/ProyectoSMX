@@ -21,3 +21,8 @@
 	<curses.h>
 	<string>
 
+1402729464 source:c:\users\carlos\documents\github\proyectosmx\main.cpp
+	<curses.h>
+	<windows.h>
+	<time.h>
+
