@@ -17,9 +17,10 @@
 1398824512 source:c:\users\jose\documents\github\proyecto smx\main.cpp
 	<curses.h>
 
-1401848930 source:c:\users\jose\documents\github\proyectosmx\main.cpp
+1402544106 source:c:\users\jose\documents\github\proyectosmx\main.cpp
 	<curses.h>
-	<string>
+	<windows.h>
+	<time.h>
 
 1402729464 source:c:\users\carlos\documents\github\proyectosmx\main.cpp
 	<curses.h>
