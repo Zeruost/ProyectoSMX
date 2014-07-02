@@ -8,6 +8,8 @@ using namespace std;
 void imprimir_todo(int matriz[25][80]){
     for (int i=0; i<=25; i++)
         for (int j=0; j<=80; j++){
+            if (matriz[i][j]==0)
+                mvaddch(i,j,' ');
             if (matriz[i][j]==1)
                 mvaddch(i,j,ACS_BLOCK);
             if (matriz[i][j]==2)
@@ -59,7 +61,7 @@ void marco(int matriz[][80]){  //Marco 2.0
     mvaddch(3, 3, ACS_ULCORNER);
     mvaddch(3, 76, ACS_URCORNER);
 }
-void menu(int matriz[25][80]){
+void menu(int matriz[25][80], bool &exit, bool &juego, bool &creditos, bool &controles){
     bool eleccion = true;
     int x = 31;
     int y = 13;
@@ -90,6 +92,22 @@ void menu(int matriz[25][80]){
         if (ch == '\n' && y == 13)
         {
             eleccion = false;
+            juego = true;
+        }
+        if (ch == '\n' && y == 14)
+        {
+            eleccion = false;
+            controles = true;
+        }
+        if (ch == '\n' && y == 15)
+        {
+            eleccion = false;
+            creditos = true;
+        }
+        if (ch == '\n' && y == 16)
+        {
+            eleccion = false;
+            exit = false;
         }
         refresh();
     }
@@ -242,10 +260,9 @@ void posicion_inicial(int matriz[25][80]){
         matriz[13][36] = 2;
         matriz[12][35] = 2;
 }
-void juego2(int matriz[25][80]){
+void juego2(int matriz[25][80], bool &juego){
 
-
-    int release = 1;
+    bool release = true;
     int ch;
     int x = 35;
     int y = 13;
@@ -254,8 +271,9 @@ void juego2(int matriz[25][80]){
         matriz[13][35] = 2;
         matriz[13][36] = 2;
         matriz[12][35] = 2;
+        imprimir_todo(matriz);
 
-    while (1)
+    while (release)
     {
         mvprintw(2,34,"Y: %d",y);
         mvprintw(2,40,"X: %d",x);
@@ -313,6 +331,7 @@ void juego2(int matriz[25][80]){
                 matriz[y][x-1] = 2;
                 matriz[y][x+1] = 2;
                 matriz[y-1][x] = 2;
+                imprimir_todo(matriz);
         }
         if (ch == KEY_LEFT && x>4)
         {
@@ -339,6 +358,7 @@ void juego2(int matriz[25][80]){
                 matriz[y][x-1] = 2;
                 matriz[y-1][x] = 2;
                 matriz[y+1][x] = 2;
+                imprimir_todo(matriz);
         }
         if (ch == KEY_RIGHT && x<73)
         {
@@ -365,6 +385,7 @@ void juego2(int matriz[25][80]){
                 matriz[y][x+1] = 2;
                 matriz[y-1][x] = 2;
                 matriz[y+1][x] = 2;
+                imprimir_todo(matriz);
         }                                //Al mantener presionada la tecla, la bala avanza mas rapido.
         if(ch == 'd'){                   // Para poder disparar las teclas son d,s,a,w.
             void baladerecha(int x,int y);
@@ -379,35 +400,54 @@ void juego2(int matriz[25][80]){
             void balaarriba(int x, int y);
         }
         if(ch == 27){              //ESCAPE para volver al menu.
-
+            release = false;
+            juego = false;
         }
 
 }
 }
 int main()
 {
-    int matriz[25][80]={0};
+    bool exit = true;
     initscr();
     curs_set(0);
     keypad(stdscr, TRUE);
     noecho();
     nodelay(stdscr,1);
     //Funciones
-    marco2(matriz);
-
-
-
-    menu(matriz);
-
-
-
-    //Aca se podria poner un contador de nivel onda nivel = 1 y con ++ al final para usarlo en la funcion de
-    //creacion de enemigos, haciendo un ciclo de enemigos y juego
-    marco2(matriz);
-    posicion_inicial(matriz);
-
-    enemigos(matriz,1);               //variable es nivel en que se encuentra uno, por ahora 1
-    juego2(matriz);
+    while(exit)
+    {
+        bool juego = false;
+        bool creditos = false;
+        bool controles = false;
+        int matriz[25][80]={0};
+        clear();
+        marco2(matriz);
+        menu(matriz,exit,juego,creditos,controles);
+        while (juego)
+        {
+        marco2(matriz);                               //Aca se podria poner un contador de nivel onda nivel = 1 y con ++ al final para usarlo en la funcion de
+        posicion_inicial(matriz);                     //creacion de enemigos, haciendo un ciclo de enemigos y juego
+        enemigos(matriz,1);                           //variable es nivel en que se encuentra uno, por ahora 1
+        juego2(matriz,juego);
+        }
+        while (creditos)
+        {
+           int ch = getch();
+           mvprintw(20,20,"Escribir Creditos, algo como esto.");
+           mvprintw(21,20,"Apreta Esc para salir.");
+           if (ch == 27)
+                creditos = false;
+        }
+        while (controles)
+        {
+           int ch = getch();
+           mvprintw(20,20,"Escribir Controles, algo como esto.");
+           mvprintw(21,20,"Apreta Esc para salir.");
+           if (ch == 27)
+                controles = false;
+        }
+    }
     endwin();
     return 0;
 }
