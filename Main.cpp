@@ -134,6 +134,7 @@ void balaarriba(int x, int y){
             mvaddch(4, x+1, ' ');
             mvaddch(2, x+1, ' ');
             }while(disparo && y>6);
+
 }
 void balaarriba2(int matriz[25][80], int x, int y){
 
@@ -149,6 +150,8 @@ void balaarriba2(int matriz[25][80], int x, int y){
             matriz[y-1][x] = 3;
             imprimir_todo(matriz);
     }while(disparo && y>5);
+     matriz[y-1][x] = {0};
+    imprimir_todo(matriz);
 }
 void balaizquierda(int x, int y){
     int ch;
@@ -178,6 +181,8 @@ void balaizquierda2(int matriz[25][80],int x, int y){
             matriz[y][x-1] = 4;
             imprimir_todo(matriz);
     }while(disparo && x>5);
+     matriz[y][x-1] = {0};
+    imprimir_todo(matriz);
 }
 void baladerecha(int x, int y){
     int ch;
@@ -207,6 +212,8 @@ void baladerecha2(int matriz[25][80], int x, int y){
             matriz[y][x+1] = 5;
             imprimir_todo(matriz);
     }while(disparo && x<74);
+     matriz[y][x+1] = {0};
+    imprimir_todo(matriz);
 }
 void balaabajo(int x, int y){
     int ch;
@@ -236,9 +243,8 @@ void balaabajo2(int matriz[25][80], int x, int y){
             matriz[y+1][x] = 6;
             imprimir_todo(matriz);
     }while(disparo && y<19);
-
-
-
+    matriz[y+1][x] = {0};
+    imprimir_todo(matriz);
 }
 void juego(int matriz[25][80]){
     int ch;
@@ -406,7 +412,7 @@ void juego2(int matriz[25][80], bool &juego){
                 matriz[y-1][x] = 2;
                 imprimir_todo(matriz);
         }
-        if (ch == KEY_LEFT && x>4)
+        if (ch == KEY_LEFT && x>5)
         {
             if (matriz[y][x] == 2)
                 matriz[y][x] = 0;
@@ -433,7 +439,7 @@ void juego2(int matriz[25][80], bool &juego){
                 matriz[y+1][x] = 2;
                 imprimir_todo(matriz);
         }
-        if (ch == KEY_RIGHT && x<73)
+        if (ch == KEY_RIGHT && x<74)
         {
             if (matriz[y][x] == 2)
                 matriz[y][x] = 0;
@@ -480,6 +486,14 @@ void juego2(int matriz[25][80], bool &juego){
 
 }
 }
+void check_dano(int matriz[25][80], int &vida){
+    for (int i=0; i<=25; i++){
+        for (int j=0; j<=80; j++)
+           if((matriz[i][j] == 2) && (matriz[i+1][j] == 7 || matriz[i-1][j] == 7 || matriz[i][j+1] == 7 || matriz[i][j-1] == 7))
+               vida--;
+    }
+}
+
 int main()
 {
     bool exit = true;
