@@ -8,34 +8,38 @@ using namespace std;
 void imprimir_todo(double matriz[25][80]){
     for (int i=0; i<=25; i++)
         for (int j=0; j<=80; j++){
-            if (matriz[i][j]==0)
+            if (matriz[i][j]==0)                // 0 espacios en blanco
                 mvaddch(i,j,' ');
-            if (matriz[i][j]==1)
+            if (matriz[i][j]==1)                // 1 murallas
                 mvaddch(i,j,ACS_BLOCK);
-            if (matriz[i][j]==2)
+            if (matriz[i][j]==2)                // 2 cursor
                 mvaddch(i,j, ACS_DIAMOND);
-            if (matriz[i][j]==3)
+            if (matriz[i][j]==3)                // 3 disparo hacia arriba
                 mvaddch(i,j,ACS_UARROW);
-            if (matriz[i][j]==4)
+            if (matriz[i][j]==4)                // 4 disparo hacia izquierda
                 mvaddch(i,j,ACS_LARROW);
-            if (matriz[i][j]==5)
+            if (matriz[i][j]==5)                // 5 disparo hacia derecha
                 mvaddch(i,j,ACS_RARROW);
-            if (matriz[i][j]==6)
+            if (matriz[i][j]==6)                // 6 disparo hacia abajo
                 mvaddch(i,j,ACS_DARROW);
-            if (matriz[i][j]==7)
+            if (matriz[i][j]==7)                // 7 Enemjgos
                 mvaddch(i,j, 'X');
         // Aca pueden ir mas impresioens siempre y cuando esten en la matriz
         }
     refresh();
 }
+void check_dano(double matriz[25][80], int &vida, int i, int j){
+           if((matriz[i][j] == 2) && (matriz[i-1][j-1] == 7 || matriz[i-1][j] == 7 || matriz[i-1][j+1] == 7 || matriz[i][j-1] == 7 || matriz[i][j+1] == 7 || matriz[i+1][j-1] == 7 || matriz[i+1][j] == 7 || matriz[i+1][j+1] == 7 || matriz[i-2][j] == 7 || matriz[i][j-2] == 7 || matriz[i][j+2] == 7 || matriz[i+2][j] == 7))
+               vida--;
+    }
 void mov_enemigo(double matriz[25][80]){
     srand(time(NULL));
     int mov = 0;
-    bool check = true;
     for (int i=0; i<=25; i++){
         for (int j=0; j<=80; j++){
             if (matriz[i][j]==7)
                 {
+                    bool check = true;
                     matriz[i][j] = 0;
 
             while (check){
@@ -236,7 +240,7 @@ void juego2(double matriz[25][80], bool &juego){
     int ch;
     int x = 39;
     int y = 12;
-
+    int vida = 3;
 
         matriz[12][39] = 2;                 //2 es el cursor/jugador
         matriz[12][40] = 2;
@@ -248,6 +252,14 @@ void juego2(double matriz[25][80], bool &juego){
     {
         mvprintw(2,34,"Y: %d",y);
         mvprintw(2,40,"X: %d",x);
+
+        if (vida == 3)
+        mvprintw(2,60, "Vidas: [] [] []");
+        if (vida == 2)
+        mvprintw(2,60, "Vidas: [] []");
+        if (vida == 1)
+        mvprintw(2,60, "Vidas: []");
+
         ch = getch();
 
         if (ch == KEY_DOWN && y<19 && matriz[y+2][x] == 0 && matriz[y+1][x-1] == 0 &&  matriz[y+1][x+1] == 0)
@@ -277,6 +289,7 @@ void juego2(double matriz[25][80], bool &juego){
                 matriz[y+1][x] = 2;
                 mov_enemigo(matriz);
                 imprimir_todo(matriz);
+                check_dano(matriz,vida,y,x);
         }
             if (ch == KEY_UP && y>5 && matriz[y-2][x] == 0 && matriz[y-1][x-1] == 0 &&  matriz[y-1][x+1] == 0)
         {
@@ -306,6 +319,7 @@ void juego2(double matriz[25][80], bool &juego){
                 matriz[y-1][x] = 2;
                 mov_enemigo(matriz);
                 imprimir_todo(matriz);
+                check_dano(matriz,vida,y,x);
         }
         if (ch == KEY_LEFT && x>5 && matriz[y][x-2] == 0 && matriz[y-1][x-1] == 0 &&  matriz[y+1][x-1] == 0)
         {
@@ -334,6 +348,7 @@ void juego2(double matriz[25][80], bool &juego){
                 matriz[y+1][x] = 2;
                 mov_enemigo(matriz);
                 imprimir_todo(matriz);
+                check_dano(matriz,vida,y,x);
         }
         if (ch == KEY_RIGHT && x<74 && matriz[y][x+2] == 0 && matriz[y-1][x+1] == 0 &&  matriz[y+1][x+1] == 0)
         {
@@ -362,6 +377,7 @@ void juego2(double matriz[25][80], bool &juego){
                 matriz[y+1][x] = 2;
                 mov_enemigo(matriz);
                 imprimir_todo(matriz);
+                check_dano(matriz,vida,y,x);
         }                                //Al mantener presionada la tecla, la bala avanza mas rapido.
         if(ch == 'd'){                   // Para poder disparar las teclas son d,s,a,w.
             baladerecha2(matriz,x,y);
@@ -380,14 +396,11 @@ void juego2(double matriz[25][80], bool &juego){
             release = false;
             juego = false;
         }
-                                              //ARREGLAR!!!!!!!!!!!!
-}
-}
-void check_dano(double matriz[25][80], int &vida){
-    for (int i=0; i<=25; i++){
-        for (int j=0; j<=80; j++)
-           if((matriz[i][j] == 2) && (matriz[i+1][j] == 7 || matriz[i-1][j] == 7 || matriz[i][j+1] == 7 || matriz[i][j-1] == 7))
-               vida--;
+        if (vida == 0)
+        {
+            release = false;
+            juego = false;
+        }
     }
 }
 void escenario_lv1(double matriz[25][80]){
@@ -724,7 +737,7 @@ int main()
         while (juego)
         {
         marco2(matriz);                               //Aca se podria poner un contador de nivel onda nivel = 1 y con ++ al final para usarlo en la funcion de
-                                                      //creacion de enemigos, haciendo un ciclo de enemigos y juego
+       // hp_bar(vida);                                              //creacion de enemigos, haciendo un ciclo de enemigos y juego
         enemigos(matriz,1);                           //variable es nivel en que se encuentra uno, por ahora 1
         escenario_lv1(matriz);
         juego2(matriz,juego);
