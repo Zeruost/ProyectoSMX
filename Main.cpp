@@ -14,6 +14,14 @@ void imprimir_todo(int matriz[25][80]){
                 mvaddch(i,j,ACS_BLOCK);
             if (matriz[i][j]==2)
                 mvaddch(i,j, ACS_DIAMOND);
+            if (matriz[i][j]==3)
+                mvaddch(i,j,ACS_UARROW);
+            if (matriz[i][j]==4)
+                mvaddch(i,j,ACS_LARROW);
+            if (matriz[i][j]==5)
+                mvaddch(i,j,ACS_RARROW);
+            if (matriz[i][j]==6)
+                mvaddch(i,j,ACS_DARROW);
         // Aca pueden ir mas impresioens siempre y cuando esten en la matriz
         }
     refresh();
@@ -127,6 +135,21 @@ void balaarriba(int x, int y){
             mvaddch(2, x+1, ' ');
             }while(disparo && y>6);
 }
+void balaarriba2(int matriz[25][80], int x, int y){
+
+    int ch;
+    bool disparo=true;
+    do{
+            halfdelay(1);
+            if(matriz[y-1][x]==3)
+            matriz[y-1][x]=0;
+            y--;
+            refresh();
+            ch = getch();
+            matriz[y-1][x] = 3;
+            imprimir_todo(matriz);
+    }while(disparo && y>5);
+}
 void balaizquierda(int x, int y){
     int ch;
     bool disparo=true;
@@ -140,6 +163,21 @@ void balaizquierda(int x, int y){
             mvaddch(y, 4, ' ');
             mvaddch(y, 2, ' ');
             }while(disparo && x>5);
+}
+void balaizquierda2(int matriz[25][80],int x, int y){
+
+    int ch;
+    bool disparo=true;
+    do{
+            halfdelay(1);
+            if(matriz[y][x-1]==4)
+            matriz[y][x-1]=0;
+            x--;
+            refresh();
+            ch = getch();
+            matriz[y][x-1] = 4;
+            imprimir_todo(matriz);
+    }while(disparo && x>5);
 }
 void baladerecha(int x, int y){
     int ch;
@@ -155,6 +193,21 @@ void baladerecha(int x, int y){
             mvaddch(y, 77, ' ');
             }while(disparo && x<72);
 }
+void baladerecha2(int matriz[25][80], int x, int y){
+
+    int ch;
+    bool disparo=true;
+    do{
+            halfdelay(1);
+            if(matriz[y][x+1]==5)
+            matriz[y][x+1]=0;
+            x++;
+            refresh();
+            ch = getch();
+            matriz[y][x+1] = 5;
+            imprimir_todo(matriz);
+    }while(disparo && x<74);
+}
 void balaabajo(int x, int y){
     int ch;
     bool disparo=true;
@@ -168,6 +221,24 @@ void balaabajo(int x, int y){
             mvaddch(20, x+1, ' ');
             mvaddch(22, x+1, ' ');
             }while(disparo && y<18);
+}
+void balaabajo2(int matriz[25][80], int x, int y){
+
+    int ch;
+    bool disparo=true;
+    do{
+            halfdelay(1);
+            if(matriz[y+1][x]==6)
+            matriz[y+1][x]=0;
+            y++;
+            refresh();
+            ch = getch();
+            matriz[y+1][x] = 6;
+            imprimir_todo(matriz);
+    }while(disparo && y<19);
+
+
+
 }
 void juego(int matriz[25][80]){
     int ch;
@@ -267,6 +338,7 @@ void juego2(int matriz[25][80], bool &juego){
     int x = 35;
     int y = 13;
 
+
         matriz[13][34] = 2;                 //2 es el cursor/jugador
         matriz[13][35] = 2;
         matriz[13][36] = 2;
@@ -308,6 +380,7 @@ void juego2(int matriz[25][80], bool &juego){
         }
             if (ch == KEY_UP && y>5)
         {
+
             if (matriz[y][x] == 2)
                 matriz[y][x] = 0;
             if (matriz[y][x-1] == 2)
@@ -388,17 +461,18 @@ void juego2(int matriz[25][80], bool &juego){
                 imprimir_todo(matriz);
         }                                //Al mantener presionada la tecla, la bala avanza mas rapido.
         if(ch == 'd'){                   // Para poder disparar las teclas son d,s,a,w.
-            void baladerecha(int x,int y);
+            baladerecha2(matriz,x,y);
         }
         if(ch == 's'){
-            void balaabajo(int x, int y);
+            balaabajo2(matriz,x,y);
         }
         if(ch == 'a'){
-            void balaizquierda(int x, int y);
+            balaizquierda2(matriz,x,y);
         }
         if(ch == 'w'){
-            void balaarriba(int x, int y);
+            balaarriba2(matriz,x,y);
         }
+
         if(ch == 27){              //ESCAPE para volver al menu.
             release = false;
             juego = false;
