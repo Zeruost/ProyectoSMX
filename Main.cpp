@@ -5,7 +5,7 @@
 using namespace std;
 
 
-void imprimir_todo(int matriz[25][80]){
+void imprimir_todo(double matriz[25][80]){
     for (int i=0; i<=25; i++)
         for (int j=0; j<=80; j++){
             if (matriz[i][j]==0)
@@ -28,7 +28,45 @@ void imprimir_todo(int matriz[25][80]){
         }
     refresh();
 }
-int marco2(int matriz[25][80]){           //1 son murallas
+void mov_enemigo(double matriz[25][80]){
+    srand(time(NULL));
+    int mov = 0;
+    bool check = true;
+    for (int i=0; i<=25; i++){
+        for (int j=0; j<=80; j++){
+            if (matriz[i][j]==7)
+                {
+                    matriz[i][j] = 0;
+
+            while (check){
+                    mov = (rand()%4)+1;
+                if (mov == 1 && matriz[i-1][j] == 0)
+                   {
+                    matriz[i-1][j] = 7;
+                    check = false;
+                   }
+                if (mov == 2 && matriz[i][j+1] == 0)
+                    {
+                    matriz[i][j+1] = 7;
+                    check = false;
+                    }
+                if (mov == 3 && matriz[i+1][j] == 0)
+                    {
+                    matriz[i+1][j] = 7;
+                    check = false;
+                    }
+                if (mov == 4 && matriz[i][j-1] == 0)
+                    {
+                    matriz[i][j-1] = 7;
+                    check = false;
+                    }
+                        }
+                }
+                                }
+                            }
+
+}
+int marco2(double matriz[25][80]){           //1 son murallas
     for(int i=4; i<=20; i++)
     {
         for(int j=4; j<=75; j++)
@@ -51,27 +89,7 @@ int marco2(int matriz[25][80]){           //1 son murallas
     refresh();
     imprimir_todo(matriz);
     }
-void marco(int matriz[][80]){  //Marco 2.0
-    for(int i=4; i<=20; i++)
-    {
-        for(int j=4; j<=75; j++)
-        {
-            mvaddch(3, j, ACS_HLINE);
-        }
-        mvaddch(i, 3, ACS_VLINE);
-
-        mvaddch(i, 76, ACS_VLINE);
-    }
-    for(int j=4; j<=75; j++)
-    {
-            mvaddch(21, j, ACS_HLINE);
-    }
-    mvaddch(21, 3, ACS_LLCORNER);
-    mvaddch(21, 76, ACS_LRCORNER);
-    mvaddch(3, 3, ACS_ULCORNER);
-    mvaddch(3, 76, ACS_URCORNER);
-}
-void menu(int matriz[25][80], bool &exit, bool &juego, bool &creditos, bool &controles){
+void menu(double matriz[25][80], bool &exit, bool &juego, bool &creditos, bool &controles){
     bool eleccion = true;
     int x = 31;
     int y = 13;
@@ -137,22 +155,7 @@ void menu(int matriz[25][80], bool &exit, bool &juego, bool &creditos, bool &con
     }
     clear();
 }
-void balaarriba(int x, int y){
-    int ch;
-    bool disparo=true;
-            do{
-            halfdelay(1);
-            mvaddch(y-2, x+1, ' ');
-            mvaddch(y-3,x+1, ACS_UARROW);
-            y--;
-            refresh();
-            ch = getch();
-            mvaddch(4, x+1, ' ');
-            mvaddch(2, x+1, ' ');
-            }while(disparo && y>6);
-
-}
-void balaarriba2(int matriz[25][80], int x, int y){
+void balaarriba2(double matriz[25][80], int x, int y){
 
     int ch;
     bool disparo=true;
@@ -169,21 +172,7 @@ void balaarriba2(int matriz[25][80], int x, int y){
      matriz[y-1][x] = {0};
     imprimir_todo(matriz);
 }
-void balaizquierda(int x, int y){
-    int ch;
-    bool disparo=true;
-            do{
-            halfdelay(1);
-            mvaddch(y, x-1, ' ');
-            mvaddch(y,x-2, ACS_LARROW);
-            x--;
-            refresh();
-            ch = getch();
-            mvaddch(y, 4, ' ');
-            mvaddch(y, 2, ' ');
-            }while(disparo && x>5);
-}
-void balaizquierda2(int matriz[25][80],int x, int y){
+void balaizquierda2(double matriz[25][80],int x, int y){
 
     int ch;
     bool disparo=true;
@@ -200,21 +189,7 @@ void balaizquierda2(int matriz[25][80],int x, int y){
      matriz[y][x-1] = {0};
     imprimir_todo(matriz);
 }
-void baladerecha(int x, int y){
-    int ch;
-    bool disparo=true;
-            do{
-            halfdelay(1);
-            mvaddch(y, x+3, ' ');
-            mvaddch(y,x+4, ACS_RARROW);
-            x++;
-            refresh();
-            ch = getch();
-            mvaddch(y, 75, ' ');
-            mvaddch(y, 77, ' ');
-            }while(disparo && x<72);
-}
-void baladerecha2(int matriz[25][80], int x, int y){
+void baladerecha2(double matriz[25][80], int x, int y){
 
     int ch;
     bool disparo=true;
@@ -231,21 +206,7 @@ void baladerecha2(int matriz[25][80], int x, int y){
      matriz[y][x+1] = {0};
     imprimir_todo(matriz);
 }
-void balaabajo(int x, int y){
-    int ch;
-    bool disparo=true;
-            do{
-            halfdelay(1);
-            mvaddch(y+2, x+1, ' ');
-            mvaddch(y+3,x+1, ACS_DARROW);
-            y++;
-            refresh();
-            ch = getch();
-            mvaddch(20, x+1, ' ');
-            mvaddch(22, x+1, ' ');
-            }while(disparo && y<18);
-}
-void balaabajo2(int matriz[25][80], int x, int y){
+void balaabajo2(double matriz[25][80], int x, int y){
 
     int ch;
     bool disparo=true;
@@ -262,109 +223,25 @@ void balaabajo2(int matriz[25][80], int x, int y){
     matriz[y+1][x] = {0};
     imprimir_todo(matriz);
 }
-void juego(int matriz[25][80]){
-    int ch;
-    int x = 35;
-    int y = 13;
-    while (1)
-    {
-        mvprintw(2,34,"Y: %d",y);
-        mvprintw(2,40,"X: %d",x);
-        ch = getch();
-        if (ch == KEY_DOWN && y<19)
-        {
-            mvaddch(y, x, ' ');              //Nuevo cursor
-            mvaddch(y, x+1, ' ');
-            mvaddch(y, x+2, ' ');
-            mvaddch(y+1, x+1, ' ');
-            y++;
-            mvaddch(y,x,ACS_DIAMOND);
-            mvaddch(y,x+1,ACS_DIAMOND);
-            mvaddch(y,x+2,ACS_DIAMOND);
-            mvaddch(y+1, x+1,ACS_DIAMOND);
-        }
-            if (ch == KEY_UP && y>5)
-        {
-            mvaddch(y, x, ' ');
-            mvaddch(y, x+1, ' ');
-            mvaddch(y, x+2, ' ');
-            mvaddch(y-1, x+1, ' ');
-            y--;
-            mvaddch(y,x,ACS_DIAMOND);
-            mvaddch(y,x+1,ACS_DIAMOND);
-            mvaddch(y,x+2,ACS_DIAMOND);
-            mvaddch(y-1,x+1,ACS_DIAMOND);
-        }
-        if (ch == KEY_LEFT && x>4)
-        {
-            mvaddch(y-1,x+1,' ');
-            mvaddch(y,x+1,' ');
-            mvaddch(y+1,x+1,' ');
-            mvaddch(y,x,' ');
-            x--;
-            mvaddch(y-1,x+1,ACS_DIAMOND);
-            mvaddch(y,x+1,ACS_DIAMOND);
-            mvaddch(y+1,x+1,ACS_DIAMOND);
-            mvaddch(y,x,ACS_DIAMOND);
-        }
-        if (ch == KEY_RIGHT && x<73)
-        {
-            mvaddch(y-1,x+1,' ');
-            mvaddch(y,x+1,' ');
-            mvaddch(y+1,x+1,' ');
-            mvaddch(y,x+2,' ');
-            x++;
-            mvaddch(y-1,x+1,ACS_DIAMOND);
-            mvaddch(y,x+1,ACS_DIAMOND);
-            mvaddch(y+1,x+1,ACS_DIAMOND);
-            mvaddch(y,x+2,ACS_DIAMOND);
-        }                                //Al mantener presionada la tecla, la bala avanza mas rapido.
-        if(ch == 'd'){                   // Para poder disparar las teclas son d,s,a,w.
-            baladerecha(x, y);
-        }
-        if(ch == 's'){
-            balaabajo(x, y);
-        }
-        if(ch == 'a'){
-            balaizquierda(x, y);
-        }
-        if(ch == 'w'){
-            balaarriba(x, y);
-        }
-        if(ch == 27){              //ESCAPE para volver al menu.
-
-        }
-        refresh();
-    }
-}
-void enemigos(int matriz[25][80],int i){
+void enemigos(double matriz[25][80],int i){
     srand(time(NULL));
     for(int r=0;r<i*2;r++)
     matriz[(rand()%17+4)][(rand()%17+4)]=7;
     imprimir_todo(matriz);
 
 }
-void posicion_inicial(int matriz[25][80]){
-        int x = 35;
-        int y = 13;
-
-        matriz[13][34] = 2;                 //2 es el cursor/jugador
-        matriz[13][35] = 2;
-        matriz[13][36] = 2;
-        matriz[12][35] = 2;
-}
-void juego2(int matriz[25][80], bool &juego){
+void juego2(double matriz[25][80], bool &juego){
 
     bool release = true;
     int ch;
-    int x = 35;
-    int y = 13;
+    int x = 39;
+    int y = 12;
 
 
-        matriz[13][34] = 2;                 //2 es el cursor/jugador
-        matriz[13][35] = 2;
-        matriz[13][36] = 2;
-        matriz[12][35] = 2;
+        matriz[12][39] = 2;                 //2 es el cursor/jugador
+        matriz[12][40] = 2;
+        matriz[12][38] = 2;
+        matriz[11][39] = 2;
         imprimir_todo(matriz);
 
     while (release)
@@ -398,6 +275,7 @@ void juego2(int matriz[25][80], bool &juego){
                 matriz[y][x-1] = 2;
                 matriz[y][x+1] = 2;
                 matriz[y+1][x] = 2;
+                mov_enemigo(matriz);
                 imprimir_todo(matriz);
         }
             if (ch == KEY_UP && y>5 && matriz[y-2][x] == 0 && matriz[y-1][x-1] == 0 &&  matriz[y-1][x+1] == 0)
@@ -426,6 +304,7 @@ void juego2(int matriz[25][80], bool &juego){
                 matriz[y][x-1] = 2;
                 matriz[y][x+1] = 2;
                 matriz[y-1][x] = 2;
+                mov_enemigo(matriz);
                 imprimir_todo(matriz);
         }
         if (ch == KEY_LEFT && x>5 && matriz[y][x-2] == 0 && matriz[y-1][x-1] == 0 &&  matriz[y+1][x-1] == 0)
@@ -453,6 +332,7 @@ void juego2(int matriz[25][80], bool &juego){
                 matriz[y][x-1] = 2;
                 matriz[y-1][x] = 2;
                 matriz[y+1][x] = 2;
+                mov_enemigo(matriz);
                 imprimir_todo(matriz);
         }
         if (ch == KEY_RIGHT && x<74 && matriz[y][x+2] == 0 && matriz[y-1][x+1] == 0 &&  matriz[y+1][x+1] == 0)
@@ -480,6 +360,7 @@ void juego2(int matriz[25][80], bool &juego){
                 matriz[y][x+1] = 2;
                 matriz[y-1][x] = 2;
                 matriz[y+1][x] = 2;
+                mov_enemigo(matriz);
                 imprimir_todo(matriz);
         }                                //Al mantener presionada la tecla, la bala avanza mas rapido.
         if(ch == 'd'){                   // Para poder disparar las teclas son d,s,a,w.
@@ -499,53 +380,17 @@ void juego2(int matriz[25][80], bool &juego){
             release = false;
             juego = false;
         }
-
+                                              //ARREGLAR!!!!!!!!!!!!
 }
 }
-void check_dano(int matriz[25][80], int &vida){
+void check_dano(double matriz[25][80], int &vida){
     for (int i=0; i<=25; i++){
         for (int j=0; j<=80; j++)
            if((matriz[i][j] == 2) && (matriz[i+1][j] == 7 || matriz[i-1][j] == 7 || matriz[i][j+1] == 7 || matriz[i][j-1] == 7))
                vida--;
     }
 }
-void mov_enemigo(int matriz[25][80]){
-    srand(time(NULL));
-    int mov = 0;
-    bool check = true;
-    for (int i=0; i<=25; i++)
-        for (int j=0; j<=80; j++){
-            if (matriz[i][j]==7)
-                {
-                    matriz[i][j] = 0;
-
-            while (check){
-                    mov = (rand()%4)+1;
-                if (mov == 1 && matriz[i-1][j] == 0)
-                   {
-                    matriz[i-1][j] = 7;
-                    check = false;
-                   }
-                if (mov == 2 && matriz[i][j+1] == 0)
-                    {
-                    matriz[i][j+1] = 7;
-                    check = false;
-                    }
-                if (mov == 3 && matriz[i+1][j] == 0)
-                    {
-                    matriz[i+1][j] = 7;
-                    check = false;
-                    }
-                if (mov == 4 && matriz[i][j-1] == 0)
-                    {
-                    matriz[i][j-1] = 7;
-                    check = false;
-                    }
-                        }
-                }
-                                }
-}
-void escenario_lv1(int matriz[25][80]){
+void escenario_lv1(double matriz[25][80]){
 
 
 
@@ -616,7 +461,7 @@ matriz  [12][68]={1};
 
 imprimir_todo(matriz);
 }
-void escenario_lv2(int matriz[25][80]){
+void escenario_lv2(double matriz[25][80]){
 
 matriz[4][39]={1};
 matriz[5][39]={1};
@@ -682,7 +527,177 @@ matriz[6][20]={1};
 
 imprimir_todo(matriz);
 }
+void escenario_lv3(double matriz[25][80]){
 
+matriz[10][4]={1};
+matriz[10][5]={1};
+matriz[10][6]={1};
+matriz[10][7]={1};
+matriz[10][8]={1};
+matriz[10][9]={1};
+matriz[10][10]={1};
+matriz[10][11]={1};
+matriz[10][12]={1};
+matriz[10][13]={1};
+matriz[10][14]={1};
+matriz[10][15]={1};
+matriz[10][16]={1};
+matriz[10][17]={1};
+
+matriz[9][17]={1};
+matriz[8][17]={1};
+matriz[7][17]={1};
+
+matriz[7][18]={1};
+matriz[7][19]={1};
+matriz[7][20]={1};
+matriz[7][21]={1};
+matriz[7][22]={1};
+matriz[7][23]={1};
+matriz[7][23]={1};
+matriz[7][24]={1};
+matriz[7][25]={1};
+
+matriz[14][4]={1};
+matriz[14][5]={1};
+matriz[14][6]={1};
+matriz[14][7]={1};
+matriz[14][8]={1};
+matriz[14][9]={1};
+matriz[14][10]={1};
+matriz[14][11]={1};
+matriz[14][12]={1};
+matriz[14][13]={1};
+matriz[14][14]={1};
+matriz[14][15]={1};
+matriz[14][16]={1};
+matriz[14][17]={1};
+
+matriz[15][17]={1};
+matriz[16][17]={1};
+matriz[17][17]={1};
+
+matriz[17][18]={1};
+matriz[17][19]={1};
+matriz[17][20]={1};
+matriz[17][21]={1};
+matriz[17][22]={1};
+matriz[17][23]={1};
+matriz[17][24]={1};
+matriz[17][25]={1};
+
+matriz[13][25]={1};
+matriz[12][25]={1};
+matriz[11][25]={1};
+
+matriz[10][75]={1};
+matriz[10][74]={1};
+matriz[10][73]={1};
+matriz[10][72]={1};
+matriz[10][71]={1};
+matriz[10][70]={1};
+matriz[10][69]={1};
+matriz[10][68]={1};
+matriz[10][67]={1};
+matriz[10][66]={1};
+matriz[10][65]={1};
+matriz[10][64]={1};
+matriz[10][63]={1};
+matriz[10][62]={1};
+
+matriz[9][62]={1};
+matriz[8][62]={1};
+matriz[7][62]={1};
+
+matriz[7][61]={1};
+matriz[7][60]={1};
+matriz[7][59]={1};
+matriz[7][58]={1};
+matriz[7][57]={1};
+matriz[7][56]={1};
+matriz[7][55]={1};
+matriz[7][54]={1};
+
+matriz[14][75]={1};
+matriz[14][74]={1};
+matriz[14][73]={1};
+matriz[14][72]={1};
+matriz[14][71]={1};
+matriz[14][70]={1};
+matriz[14][69]={1};
+matriz[14][68]={1};
+matriz[14][67]={1};
+matriz[14][66]={1};
+matriz[14][65]={1};
+matriz[14][64]={1};
+matriz[14][63]={1};
+matriz[14][62]={1};
+
+matriz[15][62]={1};
+matriz[16][62]={1};
+matriz[17][62]={1};
+
+matriz[17][61]={1};
+matriz[17][60]={1};
+matriz[17][59]={1};
+matriz[17][58]={1};
+matriz[17][57]={1};
+matriz[17][56]={1};
+matriz[17][55]={1};
+matriz[17][54]={1};
+
+matriz[13][54]={1};
+matriz[12][54]={1};
+matriz[11][54]={1};
+
+matriz[4][39]={1};
+matriz[5][39]={1};
+matriz[6][39]={1};
+matriz[7][39]={1};
+matriz[8][39]={1};
+matriz[9][39]={1};
+
+matriz[9][38]={1};
+matriz[9][37]={1};
+matriz[9][36]={1};
+matriz[9][35]={1};
+matriz[9][34]={1};
+matriz[9][33]={1};
+matriz[9][32]={1};
+
+matriz[9][40]={1};
+matriz[9][41]={1};
+matriz[9][42]={1};
+matriz[9][43]={1};
+matriz[9][44]={1};
+matriz[9][45]={1};
+matriz[9][46]={1};
+
+matriz[20][39]={1};
+matriz[19][39]={1};
+matriz[18][39]={1};
+matriz[17][39]={1};
+matriz[16][39]={1};
+
+matriz[15][32]={1};
+matriz[15][33]={1};
+matriz[15][34]={1};
+matriz[15][35]={1};
+matriz[15][36]={1};
+matriz[15][37]={1};
+matriz[15][38]={1};
+matriz[15][39]={1};
+matriz[15][40]={1};
+matriz[15][41]={1};
+matriz[15][42]={1};
+matriz[15][43]={1};
+matriz[15][44]={1};
+matriz[15][45]={1};
+matriz[15][46]={1};
+
+imprimir_todo(matriz);
+
+}
 
 int main()
 {
@@ -702,14 +717,14 @@ int main()
         bool juego = false;
         bool creditos = false;
         bool controles = false;
-        int matriz[25][80]={0};
+        double matriz[25][80]={0};
         clear();
         marco2(matriz);
         menu(matriz,exit,juego,creditos,controles);
         while (juego)
         {
         marco2(matriz);                               //Aca se podria poner un contador de nivel onda nivel = 1 y con ++ al final para usarlo en la funcion de
-        posicion_inicial(matriz);                     //creacion de enemigos, haciendo un ciclo de enemigos y juego
+                                                      //creacion de enemigos, haciendo un ciclo de enemigos y juego
         enemigos(matriz,1);                           //variable es nivel en que se encuentra uno, por ahora 1
         escenario_lv1(matriz);
         juego2(matriz,juego);
