@@ -165,7 +165,7 @@ void balaarriba2(int matriz[25][80], int x, int y){
             ch = getch();
             matriz[y-1][x] = 3;
             imprimir_todo(matriz);
-    }while(disparo && y>5);
+    }while(disparo && y>5 && matriz[y-2][x] == 0 && matriz[y-1][x-1] == 0 &&  matriz[y-1][x+1] == 0);
      matriz[y-1][x] = {0};
     imprimir_todo(matriz);
 }
@@ -196,7 +196,7 @@ void balaizquierda2(int matriz[25][80],int x, int y){
             ch = getch();
             matriz[y][x-1] = 4;
             imprimir_todo(matriz);
-    }while(disparo && x>5);
+    }while(disparo && x>5 && matriz[y][x-2] == 0 && matriz[y-1][x-1] == 0 &&  matriz[y+1][x-1] == 0);
      matriz[y][x-1] = {0};
     imprimir_todo(matriz);
 }
@@ -227,7 +227,7 @@ void baladerecha2(int matriz[25][80], int x, int y){
             ch = getch();
             matriz[y][x+1] = 5;
             imprimir_todo(matriz);
-    }while(disparo && x<74);
+    }while(disparo && matriz[y][x+2] == 0 && matriz[y-1][x+1] == 0 &&  matriz[y+1][x+1] == 0);
      matriz[y][x+1] = {0};
     imprimir_todo(matriz);
 }
@@ -258,7 +258,7 @@ void balaabajo2(int matriz[25][80], int x, int y){
             ch = getch();
             matriz[y+1][x] = 6;
             imprimir_todo(matriz);
-    }while(disparo && y<19);
+    }while(disparo && y<19 && matriz[y+2][x] == 0 && matriz[y+1][x-1] == 0 &&  matriz[y+1][x+1] == 0);
     matriz[y+1][x] = {0};
     imprimir_todo(matriz);
 }
