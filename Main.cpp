@@ -22,6 +22,8 @@ void imprimir_todo(int matriz[25][80]){
                 mvaddch(i,j,ACS_RARROW);
             if (matriz[i][j]==6)
                 mvaddch(i,j,ACS_DARROW);
+            if (matriz[i][j]==7)
+                mvaddch(i,j, 'X');
         // Aca pueden ir mas impresioens siempre y cuando esten en la matriz
         }
     refresh();
@@ -79,7 +81,21 @@ void menu(int matriz[25][80], bool &exit, bool &juego, bool &creditos, bool &con
         //start_color();
         init_pair(1,COLOR_RED,COLOR_BLACK);
         attrset(COLOR_PAIR(1));
-        mvprintw(8,33,"Shoot Many X");
+        mvprintw(7,33,"Shoot");
+        mvprintw(8,36,"Many");
+
+
+
+        mvprintw(5,40, "xxx    xxx");
+        mvprintw(6,40, " xx    xx");
+        mvprintw(7,40, "  xx  xx");
+        mvprintw(8,40, "    xx");
+        mvprintw(9,40, "  xx  xx");
+        mvprintw(10,40," xx    xx");
+        mvprintw(11,40,"xxx    xxx");
+
+
+
         mvprintw(13,33,"Iniciar Juego");
         mvprintw(14,33,"Controles");
         mvprintw(15,33,"Creditos");
@@ -324,9 +340,9 @@ void juego(int matriz[25][80]){
 void enemigos(int matriz[25][80],int i){
     srand(time(NULL));
     for(int r=0;r<i*2;r++)
-    {
-            mvprintw((rand()%17)+4, (rand()%72)+4, "X");
-    }
+    matriz[(rand()%17+4)][(rand()%17+4)]=7;
+    imprimir_todo(matriz);
+
 }
 void posicion_inicial(int matriz[25][80]){
         int x = 35;
@@ -357,7 +373,7 @@ void juego2(int matriz[25][80], bool &juego){
         mvprintw(2,40,"X: %d",x);
         ch = getch();
 
-        if (ch == KEY_DOWN && y<19)
+        if (ch == KEY_DOWN && y<19 && matriz[y+2][x] == 0 && matriz[y+1][x-1] == 0 &&  matriz[y+1][x+1] == 0)
         {
             if (matriz[y][x] == 2)
                 matriz[y][x] = 0;
@@ -384,7 +400,7 @@ void juego2(int matriz[25][80], bool &juego){
                 matriz[y+1][x] = 2;
                 imprimir_todo(matriz);
         }
-            if (ch == KEY_UP && y>5)
+            if (ch == KEY_UP && y>5 && matriz[y-2][x] == 0 && matriz[y-1][x-1] == 0 &&  matriz[y-1][x+1] == 0)
         {
 
             if (matriz[y][x] == 2)
@@ -412,7 +428,7 @@ void juego2(int matriz[25][80], bool &juego){
                 matriz[y-1][x] = 2;
                 imprimir_todo(matriz);
         }
-        if (ch == KEY_LEFT && x>5)
+        if (ch == KEY_LEFT && x>5 && matriz[y][x-2] == 0 && matriz[y-1][x-1] == 0 &&  matriz[y+1][x-1] == 0)
         {
             if (matriz[y][x] == 2)
                 matriz[y][x] = 0;
@@ -439,7 +455,7 @@ void juego2(int matriz[25][80], bool &juego){
                 matriz[y+1][x] = 2;
                 imprimir_todo(matriz);
         }
-        if (ch == KEY_RIGHT && x<74)
+        if (ch == KEY_RIGHT && x<74 && matriz[y][x+2] == 0 && matriz[y-1][x+1] == 0 &&  matriz[y+1][x+1] == 0)
         {
             if (matriz[y][x] == 2)
                 matriz[y][x] = 0;
@@ -493,6 +509,176 @@ void check_dano(int matriz[25][80], int &vida){
                vida--;
     }
 }
+void mov_enemigo(int matriz[25][80]){
+    srand(time(NULL));
+    int mov = 0;
+    bool check = true;
+    for (int i=0; i<=25; i++)
+        for (int j=0; j<=80; j++){
+            if (matriz[i][j]==7)
+                {
+                    matriz[i][j] = 0;
+
+            while (check){
+                    mov = (rand()%4)+1;
+                if (mov == 1 && matriz[i-1][j] == 0)
+                   {
+                    matriz[i-1][j] = 7;
+                    check = false;
+                   }
+                if (mov == 2 && matriz[i][j+1] == 0)
+                    {
+                    matriz[i][j+1] = 7;
+                    check = false;
+                    }
+                if (mov == 3 && matriz[i+1][j] == 0)
+                    {
+                    matriz[i+1][j] = 7;
+                    check = false;
+                    }
+                if (mov == 4 && matriz[i][j-1] == 0)
+                    {
+                    matriz[i][j-1] = 7;
+                    check = false;
+                    }
+                        }
+                }
+                                }
+}
+void escenario_lv1(int matriz[25][80]){
+
+matriz [10][22]={1};
+matriz [9][22]={1};
+matriz[8][22]={1};
+matriz[7][22]={1};
+matriz[7][21]={1};
+matriz[7][20]={1};
+
+matriz[10][57]={1};
+matriz[9][57]={1};
+matriz[8][57]={1};
+matriz[7][57]={1};
+matriz[7][58]={1};
+matriz[7][59]={1};
+
+matriz[17][57]={1};
+matriz[16][57]={1};
+matriz[15][57]={1};
+matriz[14][57]={1};
+matriz[17][58]={1};
+matriz[17][59]={1};
+
+matriz[17][22]={1};
+matriz[17][21]={1};
+matriz[17][20]={1};
+matriz[16][22]={1};
+matriz[15][22]={1};
+matriz[14][22]={1};
+
+matriz[13][4]={1};
+matriz[12][4]={1};
+matriz[11][4]={1};
+matriz[13][5]={1};
+matriz[12][5]={1};
+matriz[11][5]={1};
+matriz[13][6]={1};
+matriz[12][6]={1};
+matriz[11][6]={1};
+matriz[13][7]={1};
+matriz[12][7]={1};
+matriz[11][7]={1};
+matriz[12][8]={1};
+matriz[12][9]={1};
+matriz[12][10]={1};
+matriz[12][11]={1};
+
+
+matriz  [13][75]={1};
+matriz  [12][75]={1};
+matriz  [11][75]={1};
+matriz  [13][74]={1};
+matriz  [12][74]={1};
+matriz  [11][74]={1};
+matriz  [13][73]={1};
+matriz  [12][73]={1};
+matriz  [11][73]={1};
+matriz  [13][72]={1};
+matriz  [12][72]={1};
+matriz  [11][72]={1};
+matriz  [12][71]={1};
+matriz  [12][70]={1};
+matriz  [12][69]={1};
+matriz  [12][68]={1};
+
+imprimir_todo(matriz);
+}
+void escenario_lv2(int matriz[25][80]){
+
+matriz[4][39]={1};
+matriz[5][39]={1};
+matriz[6][39]={1};
+matriz[7][39]={1};
+matriz[8][39]={1};
+matriz[9][39]={1};
+
+matriz[9][40]={1};
+matriz[9][41]={1};
+matriz[9][42]={1};
+matriz[9][43]={1};
+matriz[9][44]={1};
+
+matriz[9][38]={1};
+matriz[9][37]={1};
+matriz[9][36]={1};
+matriz[9][35]={1};
+matriz[9][34]={1};
+
+matriz[20][39]={1};
+matriz[19][39]={1};
+matriz[18][39]={1};
+matriz[17][39]={1};
+matriz[16][39]={1};
+matriz[15][39]={1};
+
+matriz[15][40]={1};
+matriz[15][41]={1};
+matriz[15][42]={1};
+matriz[15][43]={1};
+matriz[15][44]={1};
+
+matriz[15][38]={1};
+matriz[15][37]={1};
+matriz[15][36]={1};
+matriz[15][35]={1};
+matriz[15][34]={1};
+
+matriz[12][5]={1};
+matriz[12][6]={1};
+matriz[12][7]={1};
+matriz[12][8]={1};
+matriz[12][9]={1};
+matriz[12][10]={1};
+matriz[12][11]={1};
+matriz[12][12]={1};
+matriz[12][13]={1};
+matriz[12][14]={1};
+matriz[12][15]={1};
+matriz[12][16]={1};
+matriz[12][17]={1};
+matriz[12][18]={1};
+matriz[12][19]={1};
+matriz[12][20]={1};
+
+matriz[11][20]={1};
+matriz[10][20]={1};
+matriz[9][20]={1};
+matriz[8][20]={1};
+matriz[7][20]={1};
+matriz[6][20]={1};
+
+imprimir_todo(matriz);
+}
+
 
 int main()
 {
@@ -517,6 +703,7 @@ int main()
         marco2(matriz);                               //Aca se podria poner un contador de nivel onda nivel = 1 y con ++ al final para usarlo en la funcion de
         posicion_inicial(matriz);                     //creacion de enemigos, haciendo un ciclo de enemigos y juego
         enemigos(matriz,1);                           //variable es nivel en que se encuentra uno, por ahora 1
+        escenario_lv1(matriz);
         juego2(matriz,juego);
         }
         while (creditos)
@@ -530,7 +717,24 @@ int main()
         while (controles)
         {
            int ch = getch();
-           mvprintw(20,20,"Escribir Controles, algo como esto.");
+           mvprintw(4,16,"1)Para moverte utiliza las flechas del teclado:");
+           mvaddch(7,38, ACS_UARROW);
+           mvaddch(8,36, ACS_LARROW);
+           mvaddch(8,40, ACS_RARROW);
+           mvaddch(8,38, ACS_DARROW);
+
+           mvprintw(10,16,"2)Para disparar pulsa W,A,S,D de la siguiente manera:");
+           mvaddch(13,38, ACS_UARROW);
+           mvprintw(14,38,"W");
+           mvaddch(17,38, ACS_DARROW);
+           mvprintw(16,38,"D");
+           mvaddch(15,34, ACS_LARROW);
+           mvprintw(15,35," A");
+           mvaddch(15,42, ACS_RARROW);
+           mvprintw(15,39," D");
+
+
+
            mvprintw(21,20,"Apreta Esc para salir.");
            if (ch == 27)
                 controles = false;
