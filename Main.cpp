@@ -10,10 +10,18 @@ void imprimir_todo(double matriz[25][80]){
         for (int j=0; j<=80; j++){
             if (matriz[i][j]==0)                // 0 espacios en blanco
                 mvaddch(i,j,' ');
+
+            attron(COLOR_PAIR(1));
             if (matriz[i][j]==1)                // 1 murallas
                 mvaddch(i,j,ACS_BLOCK);
+            attroff(COLOR_PAIR(1));
+
+            attron(COLOR_PAIR(3));
             if (matriz[i][j]==2)                // 2 cursor
                 mvaddch(i,j, ACS_DIAMOND);
+            attroff(COLOR_PAIR(3));
+
+            attron(COLOR_PAIR(6));
             if (matriz[i][j]==3)                // 3 disparo hacia arriba
                 mvaddch(i,j,ACS_UARROW);
             if (matriz[i][j]==4)                // 4 disparo hacia izquierda
@@ -22,8 +30,12 @@ void imprimir_todo(double matriz[25][80]){
                 mvaddch(i,j,ACS_RARROW);
             if (matriz[i][j]==6)                // 6 disparo hacia abajo
                 mvaddch(i,j,ACS_DARROW);
+            attroff(COLOR_PAIR(6));
+
+            attron(COLOR_PAIR(5));
             if (matriz[i][j]==7)                // 7 Enemjgos
                 mvaddch(i,j, 'X');
+            attroff(COLOR_PAIR(5));
         // Aca pueden ir mas impresioens siempre y cuando esten en la matriz
         }
     refresh();
@@ -100,14 +112,12 @@ void menu(double matriz[25][80], bool &exit, bool &juego, bool &creditos, bool &
     int ch;
     while (eleccion)
     {
-        //start_color();
-        init_pair(1,COLOR_RED,COLOR_BLACK);
-        attrset(COLOR_PAIR(1));
+    attron(COLOR_PAIR(3));
         mvprintw(7,33,"Shoot");
         mvprintw(8,36,"Many");
+    attroff(COLOR_PAIR(3));
 
-
-
+    attron(COLOR_PAIR(5));
         mvprintw(5,40, "xxx    xxx");
         mvprintw(6,40, " xx    xx");
         mvprintw(7,40, "  xx  xx");
@@ -115,15 +125,19 @@ void menu(double matriz[25][80], bool &exit, bool &juego, bool &creditos, bool &
         mvprintw(9,40, "  xx  xx");
         mvprintw(10,40," xx    xx");
         mvprintw(11,40,"xxx    xxx");
+    attroff(COLOR_PAIR(5));
 
-
-
+    attron(COLOR_PAIR(2));
         mvprintw(13,33,"Iniciar Juego");
         mvprintw(14,33,"Controles");
         mvprintw(15,33,"Creditos");
         mvprintw(16,33,"Salir");
         mvprintw(23,22,"Presione ENTER para elegir una opcion.");
+    attroff(COLOR_PAIR(2));
+
+    attron(COLOR_PAIR(1));
         mvaddch(y, x, ACS_RARROW);//FLECHA
+    attroff(COLOR_PAIR(1));
         ch = getch();
         if (ch == KEY_DOWN && y<16)
         {
@@ -229,10 +243,22 @@ void balaabajo2(double matriz[25][80], int x, int y){
 }
 void enemigos(double matriz[25][80],int i){
     srand(time(NULL));
+    bool comprobar = true;
     for(int r=0;r<i*2;r++)
-    matriz[(rand()%17+4)][(rand()%17+4)]=7;
-    imprimir_todo(matriz);
-
+    {
+        comprobar = true;
+        while(comprobar)
+        {
+            int y = rand()%17+4;
+            int x = rand()%72+4;
+                if (matriz[y][x]==0)
+                {
+                matriz[y][x]=7;
+                comprobar = false;
+                imprimir_todo(matriz);
+                }
+        }
+    }
 }
 void juego2(double matriz[25][80], bool &juego){
 
@@ -253,13 +279,14 @@ void juego2(double matriz[25][80], bool &juego){
         mvprintw(2,34,"Y: %d",y);
         mvprintw(2,40,"X: %d",x);
 
+        attron(COLOR_PAIR(2));
         if (vida == 3)
         mvprintw(2,60, "Vidas: [] [] []");
         if (vida == 2)
         mvprintw(2,60, "Vidas: [] []");
         if (vida == 1)
         mvprintw(2,60, "Vidas: []");
-
+        attroff(COLOR_PAIR(2));
         ch = getch();
 
         if (ch == KEY_DOWN && y<19 && matriz[y+2][x] == 0 && matriz[y+1][x-1] == 0 &&  matriz[y+1][x+1] == 0)
@@ -514,6 +541,7 @@ matriz[15][36]={1};
 matriz[15][35]={1};
 matriz[15][34]={1};
 
+matriz[12][4]={1};
 matriz[12][5]={1};
 matriz[12][6]={1};
 matriz[12][7]={1};
@@ -536,7 +564,43 @@ matriz[10][20]={1};
 matriz[9][20]={1};
 matriz[8][20]={1};
 matriz[7][20]={1};
-matriz[6][20]={1};
+
+matriz[13][20]={1};
+matriz[14][20]={1};
+matriz[15][20]={1};
+matriz[16][20]={1};
+matriz[17][20]={1};
+
+matriz[12][75]={1};
+matriz[12][74]={1};
+matriz[12][73]={1};
+matriz[12][72]={1};
+matriz[12][71]={1};
+matriz[12][70]={1};
+matriz[12][69]={1};
+matriz[12][68]={1};
+matriz[12][67]={1};
+matriz[12][66]={1};
+matriz[12][65]={1};
+matriz[12][64]={1};
+matriz[12][63]={1};
+matriz[12][62]={1};
+matriz[12][61]={1};
+matriz[12][60]={1};
+matriz[12][59]={1};
+matriz[12][58]={1};
+
+matriz[11][58]={1};
+matriz[10][58]={1};
+matriz[9][58]={1};
+matriz[8][58]={1};
+matriz[7][58]={1};
+
+matriz[13][58]={1};
+matriz[14][58]={1};
+matriz[15][58]={1};
+matriz[16][58]={1};
+matriz[17][58]={1};
 
 imprimir_todo(matriz);
 }
@@ -720,10 +784,18 @@ int main()
     keypad(stdscr, TRUE);
     noecho();
     nodelay(stdscr,1);
-    //Funciones
 
-    //start_color();
-    //init_pair(1,COLOR_RED,COLOR_BLACK);
+
+    start_color();
+    init_pair(1,COLOR_GREEN,COLOR_BLACK);
+    init_pair(2,COLOR_RED,COLOR_BLACK);
+    init_pair(3,COLOR_CYAN,COLOR_BLACK);
+    init_pair(4,COLOR_BLUE,COLOR_BLACK);
+    init_pair(5,COLOR_YELLOW,COLOR_BLACK);
+    init_pair(6,COLOR_MAGENTA,COLOR_BLACK);
+    init_pair(6,COLOR_MAGENTA,COLOR_BLACK);
+
+//Funciones
 
     while(exit)
     {
@@ -739,7 +811,7 @@ int main()
         marco2(matriz);                               //Aca se podria poner un contador de nivel onda nivel = 1 y con ++ al final para usarlo en la funcion de
        // hp_bar(vida);                                              //creacion de enemigos, haciendo un ciclo de enemigos y juego
         enemigos(matriz,1);                           //variable es nivel en que se encuentra uno, por ahora 1
-        escenario_lv1(matriz);
+        escenario_lv2(matriz);
         juego2(matriz,juego);
         }
         while (creditos)
@@ -753,11 +825,14 @@ int main()
         while (controles)
         {
            int ch = getch();
+
+           attron(COLOR_PAIR(1));
            mvprintw(4,16,"1)Para moverte utiliza las flechas del teclado:");
            mvaddch(7,38, ACS_UARROW);
            mvaddch(8,36, ACS_LARROW);
            mvaddch(8,40, ACS_RARROW);
            mvaddch(8,38, ACS_DARROW);
+
 
            mvprintw(10,16,"2)Para disparar pulsa W,A,S,D de la siguiente manera:");
            mvaddch(13,38, ACS_UARROW);
@@ -769,9 +844,13 @@ int main()
            mvaddch(15,42, ACS_RARROW);
            mvprintw(15,39," D");
 
+           mvprintw(18,16,"3)Presiona cualquier tecla mientras disparas psra aumentar");
+           mvprintw(19,16,"la velocidad de la bala.");
+           attroff(COLOR_PAIR(1));
 
-
+           attron(COLOR_PAIR(2));
            mvprintw(21,20,"Apreta Esc para salir.");
+           attroff(COLOR_PAIR(2));
            if (ch == 27)
                 controles = false;
         }
