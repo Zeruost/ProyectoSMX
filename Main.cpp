@@ -36,13 +36,45 @@ void imprimir_todo(double matriz[25][80]){
             if (matriz[i][j]==7)                // 7 Enemjgos
                 mvaddch(i,j, 'X');
             attroff(COLOR_PAIR(5));
+
+            attron(COLOR_PAIR(2));              // 8 Explosion
+            if (matriz[i][j]==8)
+                mvaddch(i,j,ACS_BOARD);
+            attroff(COLOR_PAIR(2));
+
+            attron(COLOR_PAIR(2));
+            if (matriz[i][j]==9)                // 9 Cursor golpeado
+                mvaddch(i,j, ACS_DIAMOND);
+            attroff(COLOR_PAIR(2));
+
         // Aca pueden ir mas impresioens siempre y cuando esten en la matriz
         }
     refresh();
 }
 void check_dano(double matriz[25][80], int &vida, int i, int j){
            if((matriz[i][j] == 2) && (matriz[i-1][j-1] == 7 || matriz[i-1][j] == 7 || matriz[i-1][j+1] == 7 || matriz[i][j-1] == 7 || matriz[i][j+1] == 7 || matriz[i+1][j-1] == 7 || matriz[i+1][j] == 7 || matriz[i+1][j+1] == 7 || matriz[i-2][j] == 7 || matriz[i][j-2] == 7 || matriz[i][j+2] == 7 || matriz[i+2][j] == 7))
-               vida--;
+               {
+                   vida--;
+                   for (int l=0; l<=25; l++)
+                    {
+                    for (int m=0; m<=80; m++)
+                        if(matriz[l][m] == 2)
+                           {
+                            matriz[l][m] = 9;
+                            imprimir_todo(matriz);
+                           }
+                    }
+                    Sleep(400);
+                    for (int l=0; l<=25; l++)
+                    {
+                    for (int m=0; m<=80; m++)
+                        if(matriz[l][m] == 9)
+                           {
+                            matriz[l][m] = 2;
+                            imprimir_todo(matriz);
+                           }
+                    }
+               }
     }
 void mov_enemigo(double matriz[25][80]){
     srand(time(NULL));
@@ -247,6 +279,7 @@ void baladerecha2(double matriz[25][80], int x, int y, int &puntuacion){
 
     int ch;
     bool disparo=true;
+
     do{
             halfdelay(1);
             if(matriz[y][x+1]==5)
@@ -273,7 +306,6 @@ void baladerecha2(double matriz[25][80], int x, int y, int &puntuacion){
    matriz[y][x+2] = {0};
    puntuacion +=100;
    imprimir_todo(matriz);
-
    }
 }
 void balaabajo2(double matriz[25][80], int x, int y, int &puntuacion){
@@ -309,16 +341,21 @@ void balaabajo2(double matriz[25][80], int x, int y, int &puntuacion){
    imprimir_todo(matriz);
    }
 }
-void enemigos(double matriz[25][80],int i){
+void enemigos(double matriz[25][80],int nivel,int &enemigos_matar){
     srand(time(NULL));
     bool comprobar = true;
-    for(int r=0;r<i*2;r++)
+    enemigos_matar = 0;
+        matriz[12][39] = 2;
+        matriz[12][40] = 2;
+        matriz[12][38] = 2;
+        matriz[11][39] = 2;
+    for(int r=0;r<nivel*2;r++)
     {
         comprobar = true;
         while(comprobar)
         {
-            int y = rand()%17+4;
-            int x = rand()%72+4;
+            int y = (rand()%17)+4;
+            int x = (rand()%72)+4;
                 if (matriz[y][x]==0)
                 {
                 matriz[y][x]=7;
@@ -326,10 +363,13 @@ void enemigos(double matriz[25][80],int i){
                 imprimir_todo(matriz);
                 }
         }
+        enemigos_matar++;
     }
+    enemigos_matar *= 100;
 }
-void juego2(double matriz[25][80], bool &juego, int &puntuacion){
+void juego2(double matriz[25][80], bool &juego, int &puntuacion, int enemigos_matar){
 
+    int puntuacion_inicial = puntuacion;
     bool release = true;
     int ch;
     int x = 39;
@@ -350,12 +390,21 @@ void juego2(double matriz[25][80], bool &juego, int &puntuacion){
         mvprintw(1,60, "Puntuacion: %d",puntuacion);
 
         attron(COLOR_PAIR(2));
-        if (vida == 3)
-        mvprintw(2,60, "Vidas: [] [] []");
-        if (vida == 2)
-        mvprintw(2,60, "Vidas: [] []");
-        if (vida == 1)
-        mvprintw(2,60, "Vidas: []");
+        if (vida == 3){
+        mvprintw(2,60, "Vidas: ");
+        mvaddrawch(2,67,3);
+        mvaddrawch(2,69,3);
+        mvaddrawch(2,71,3);
+        }
+        if (vida == 2){
+        mvprintw(2,60, "Vidas:");
+        mvaddrawch(2,67,3);
+        mvaddrawch(2,69,3);
+        }
+        if (vida == 1){
+        mvprintw(2,60, "Vidas:");
+        mvaddrawch(2,67,3);
+        }
         attroff(COLOR_PAIR(2));
         ch = getch();
 
@@ -497,6 +546,21 @@ void juego2(double matriz[25][80], bool &juego, int &puntuacion){
         {
             release = false;
             juego = false;
+        }
+        if (puntuacion - puntuacion_inicial == enemigos_matar)
+        {
+            release = false;
+            juego = true;
+            matriz[y-1][x-1] = 0;
+            matriz[y-1][x] = 0;
+            matriz[y][x+1] = 0;
+            matriz[y][x-1] = 0;
+            matriz[y][x] = 0;
+            matriz[y][x+1] = 0;
+            matriz[y+1][x-1] = 0;
+            matriz[y+1][x] = 0;
+            matriz[y+1][x+1] = 0;
+            Sleep(1000);
         }
     }
 }
@@ -845,7 +909,15 @@ matriz[15][46]={1};
 imprimir_todo(matriz);
 
 }
-
+void a_cero(double matriz[25][80]){
+    for (int i=0; i<=25; i++)
+    {
+        for (int j=0; j<=80; j++)
+        {
+        matriz[i][j] = 0;
+        }
+    }
+}
 int main()
 {
     bool exit = true;
@@ -870,9 +942,11 @@ int main()
     while(exit)
     {
         int puntuacion = 0;
+        int enemigos_matar = 0;
         bool juego = false;
         bool creditos = false;
         bool controles = false;
+        int nivel = 1;
         double matriz[25][80]={0};
         clear();
         marco2(matriz);
@@ -881,9 +955,10 @@ int main()
         {
         marco2(matriz);                               //Aca se podria poner un contador de nivel onda nivel = 1 y con ++ al final para usarlo en la funcion de
        // hp_bar(vida);                                              //creacion de enemigos, haciendo un ciclo de enemigos y juego
-        enemigos(matriz,1);                           //variable es nivel en que se encuentra uno, por ahora 1
         escenario_lv2(matriz);
-        juego2(matriz,juego,puntuacion);
+        enemigos(matriz,nivel,enemigos_matar);                           //variable es nivel en que se encuentra uno, por ahora 1
+        juego2(matriz,juego,puntuacion,enemigos_matar);
+        nivel++;
         }
         while (creditos)
         {
