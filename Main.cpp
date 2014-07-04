@@ -380,6 +380,7 @@ void juego2(double matriz[25][80], bool &juego, int &puntuacion, int enemigos_ma
         matriz[12][40] = 2;
         matriz[12][38] = 2;
         matriz[11][39] = 2;
+        matriz[13][39] = 2;
         imprimir_todo(matriz);
 
     while (release)
@@ -433,6 +434,7 @@ void juego2(double matriz[25][80], bool &juego, int &puntuacion, int enemigos_ma
                 matriz[y][x-1] = 2;
                 matriz[y][x+1] = 2;
                 matriz[y+1][x] = 2;
+                matriz[y-1][x] = 2;
                 mov_enemigo(matriz);
                 imprimir_todo(matriz);
                 check_dano(matriz,vida,y,x);
@@ -463,6 +465,7 @@ void juego2(double matriz[25][80], bool &juego, int &puntuacion, int enemigos_ma
                 matriz[y][x-1] = 2;
                 matriz[y][x+1] = 2;
                 matriz[y-1][x] = 2;
+                matriz[y+1][x] = 2;
                 mov_enemigo(matriz);
                 imprimir_todo(matriz);
                 check_dano(matriz,vida,y,x);
@@ -492,6 +495,7 @@ void juego2(double matriz[25][80], bool &juego, int &puntuacion, int enemigos_ma
                 matriz[y][x-1] = 2;
                 matriz[y-1][x] = 2;
                 matriz[y+1][x] = 2;
+                matriz[y][x+1] = 2;
                 mov_enemigo(matriz);
                 imprimir_todo(matriz);
                 check_dano(matriz,vida,y,x);
@@ -521,6 +525,7 @@ void juego2(double matriz[25][80], bool &juego, int &puntuacion, int enemigos_ma
                 matriz[y][x+1] = 2;
                 matriz[y-1][x] = 2;
                 matriz[y+1][x] = 2;
+                matriz[y][x-1] = 2;
                 mov_enemigo(matriz);
                 imprimir_todo(matriz);
                 check_dano(matriz,vida,y,x);
