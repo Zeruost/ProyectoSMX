@@ -76,6 +76,8 @@ void mov_enemigo(double matriz[25][80]){
                     matriz[i][j-1] = 7;
                     check = false;
                     }
+                 if ((mov == 1 && matriz[i-1][j] != 0) && (mov == 2 && matriz[i][j+1] != 0) && (mov == 3 && matriz[i+1][j] != 0) && (mov == 4 && matriz[i][j-1] != 0))
+                    check = false;
                         }
                 }
                                 }
@@ -173,7 +175,7 @@ void menu(double matriz[25][80], bool &exit, bool &juego, bool &creditos, bool &
     }
     clear();
 }
-void balaarriba2(double matriz[25][80], int x, int y){
+void balaarriba2(double matriz[25][80], int x, int y, int &puntuacion){
 
     int ch;
     bool disparo=true;
@@ -187,10 +189,26 @@ void balaarriba2(double matriz[25][80], int x, int y){
             matriz[y-1][x] = 3;
             imprimir_todo(matriz);
     }while(disparo && y>5 && matriz[y-2][x] == 0);
-     matriz[y-1][x] = {0};
-    imprimir_todo(matriz);
+   if(matriz[y-2][x]==1){
+   Sleep(200);
+   matriz[y-1][x] = {8};
+   imprimir_todo(matriz);
+   Sleep(200);
+   matriz[y-1][x] = {0};
+   imprimir_todo(matriz);
+   }
+   else if(matriz[y-2][x]==7){
+   matriz[y-2][x] = {8};
+   matriz[y-1][x] = {0};
+   imprimir_todo(matriz);
+   Sleep(200);
+   matriz[y-2][x] = {0};
+   puntuacion +=100;
+   imprimir_todo(matriz);
+
 }
-void balaizquierda2(double matriz[25][80],int x, int y){
+}
+void balaizquierda2(double matriz[25][80],int x, int y, int &puntuacion){
 
     int ch;
     bool disparo=true;
@@ -204,10 +222,28 @@ void balaizquierda2(double matriz[25][80],int x, int y){
             matriz[y][x-1] = 4;
             imprimir_todo(matriz);
     }while(disparo && x>5 && matriz[y][x-2] == 0);
-     matriz[y][x-1] = {0};
-    imprimir_todo(matriz);
+   if(matriz[y][x-2]==1){
+   Sleep(200);
+   matriz[y][x-1] = {8};
+   imprimir_todo(matriz);
+   Sleep(200);
+   matriz[y][x-1] = {0};
+   imprimir_todo(matriz);
+   }
+   else if(matriz[y][x-2]==7){
+   matriz[y][x-2] = {8};
+   matriz[y][x-1] = {0};
+   imprimir_todo(matriz);
+   Sleep(200);
+   matriz[y][x-2] = {0};
+   puntuacion +=100;
+   imprimir_todo(matriz);
+
+   }
+
+
 }
-void baladerecha2(double matriz[25][80], int x, int y){
+void baladerecha2(double matriz[25][80], int x, int y, int &puntuacion){
 
     int ch;
     bool disparo=true;
@@ -221,10 +257,26 @@ void baladerecha2(double matriz[25][80], int x, int y){
             matriz[y][x+1] = 5;
             imprimir_todo(matriz);
     }while(disparo && matriz[y][x+2] == 0);
-     matriz[y][x+1] = {0};
-    imprimir_todo(matriz);
+   if(matriz[y][x+2]==1){
+   Sleep(200);
+   matriz[y][x+1] = {8};
+   imprimir_todo(matriz);
+   Sleep(200);
+   matriz[y][x+1] = {0};
+   imprimir_todo(matriz);
+   }
+   else if(matriz[y][x+2]==7){
+   matriz[y][x+2] = {8};
+   matriz[y][x+1] = {0};
+   imprimir_todo(matriz);
+   Sleep(200);
+   matriz[y][x+2] = {0};
+   puntuacion +=100;
+   imprimir_todo(matriz);
+
+   }
 }
-void balaabajo2(double matriz[25][80], int x, int y){
+void balaabajo2(double matriz[25][80], int x, int y, int &puntuacion){
 
     int ch;
     bool disparo=true;
@@ -238,8 +290,24 @@ void balaabajo2(double matriz[25][80], int x, int y){
             matriz[y+1][x] = 6;
             imprimir_todo(matriz);
     }while(disparo && y<19 && matriz[y+2][x] == 0);
-    matriz[y+1][x] = {0};
-    imprimir_todo(matriz);
+
+   if(matriz[y+2][x]==1){
+   Sleep(200);
+   matriz[y+1][x] = {8};
+   imprimir_todo(matriz);
+   Sleep(200);
+   matriz[y+1][x] = {0};
+   imprimir_todo(matriz);
+   }
+   else if(matriz[y+2][x]==7){
+   matriz[y+2][x] = {8};
+   matriz[y+1][x] = {0};
+   imprimir_todo(matriz);
+   Sleep(200);
+   matriz[y+2][x] = {0};
+   puntuacion +=100;
+   imprimir_todo(matriz);
+   }
 }
 void enemigos(double matriz[25][80],int i){
     srand(time(NULL));
@@ -260,7 +328,7 @@ void enemigos(double matriz[25][80],int i){
         }
     }
 }
-void juego2(double matriz[25][80], bool &juego){
+void juego2(double matriz[25][80], bool &juego, int &puntuacion){
 
     bool release = true;
     int ch;
@@ -278,6 +346,8 @@ void juego2(double matriz[25][80], bool &juego){
     {
         mvprintw(2,34,"Y: %d",y);
         mvprintw(2,40,"X: %d",x);
+
+        mvprintw(1,60, "Puntuacion: %d",puntuacion);
 
         attron(COLOR_PAIR(2));
         if (vida == 3)
@@ -407,16 +477,16 @@ void juego2(double matriz[25][80], bool &juego){
                 check_dano(matriz,vida,y,x);
         }                                //Al mantener presionada la tecla, la bala avanza mas rapido.
         if(ch == 'd'){                   // Para poder disparar las teclas son d,s,a,w.
-            baladerecha2(matriz,x,y);
+            baladerecha2(matriz,x,y,puntuacion);
         }
         if(ch == 's'){
-            balaabajo2(matriz,x,y);
+            balaabajo2(matriz,x,y,puntuacion);
         }
         if(ch == 'a'){
-            balaizquierda2(matriz,x,y);
+            balaizquierda2(matriz,x,y,puntuacion);
         }
         if(ch == 'w'){
-            balaarriba2(matriz,x,y);
+            balaarriba2(matriz,x,y,puntuacion);
         }
 
         if(ch == 27){              //ESCAPE para volver al menu.
@@ -799,6 +869,7 @@ int main()
 
     while(exit)
     {
+        int puntuacion = 0;
         bool juego = false;
         bool creditos = false;
         bool controles = false;
@@ -812,7 +883,7 @@ int main()
        // hp_bar(vida);                                              //creacion de enemigos, haciendo un ciclo de enemigos y juego
         enemigos(matriz,1);                           //variable es nivel en que se encuentra uno, por ahora 1
         escenario_lv2(matriz);
-        juego2(matriz,juego);
+        juego2(matriz,juego,puntuacion);
         }
         while (creditos)
         {
