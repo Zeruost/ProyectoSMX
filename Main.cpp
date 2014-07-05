@@ -142,7 +142,7 @@ int marco2(double matriz[25][80]){           //1 son murallas
     refresh();
     imprimir_todo(matriz);
     }
-void menu(double matriz[25][80], bool &exit, bool &juego, bool &creditos, bool &controles){
+void menu(double matriz[25][80], bool &exit, bool &juego, bool &creditos, bool &controles, bool &bio){
     bool eleccion = true;
     int x = 31;
     int y = 13;
@@ -166,9 +166,10 @@ void menu(double matriz[25][80], bool &exit, bool &juego, bool &creditos, bool &
 
     attron(COLOR_PAIR(2));
         mvprintw(13,33,"Iniciar Juego");
-        mvprintw(14,33,"Controles");
-        mvprintw(15,33,"Creditos");
-        mvprintw(16,33,"Salir");
+        mvprintw(14,33,"Biografias");
+        mvprintw(15,33,"Controles");
+        mvprintw(16,33,"Creditos");
+        mvprintw(17,33,"Salir");
         mvprintw(23,22,"Presione ENTER para elegir una opcion.");
     attroff(COLOR_PAIR(2));
 
@@ -194,14 +195,19 @@ void menu(double matriz[25][80], bool &exit, bool &juego, bool &creditos, bool &
         if (ch == '\n' && y == 14)
         {
             eleccion = false;
-            controles = true;
+            bio = true;
         }
         if (ch == '\n' && y == 15)
         {
             eleccion = false;
-            creditos = true;
+            controles = true;
         }
         if (ch == '\n' && y == 16)
+        {
+            eleccion = false;
+            creditos = true;
+        }
+        if (ch == '\n' && y == 17)
         {
             eleccion = false;
             exit = false;
@@ -214,7 +220,7 @@ void balaarriba2(double matriz[25][80], int x, int y, int &puntuacion){
 
     int ch;
     bool disparo=true;
-    do{
+    while(disparo && y>5 && matriz[y-2][x] == 0){
             halfdelay(1);
             if(matriz[y-1][x]==3)
             matriz[y-1][x]=0;
@@ -223,8 +229,13 @@ void balaarriba2(double matriz[25][80], int x, int y, int &puntuacion){
             ch = getch();
             matriz[y-1][x] = 3;
             imprimir_todo(matriz);
-    }while(disparo && y>5 && matriz[y-2][x] == 0);
-   if(matriz[y-2][x]==1){
+
+    }
+   if(matriz[y-2][x]==1 && matriz[y-1][x]==2){
+    matriz[y-1][x]={2};
+    imprimir_todo(matriz);
+   }
+   else if(matriz[y-2][x]==1){
    Sleep(200);
    matriz[y-1][x] = {8};
    imprimir_todo(matriz);
@@ -232,22 +243,34 @@ void balaarriba2(double matriz[25][80], int x, int y, int &puntuacion){
    matriz[y-1][x] = {0};
    imprimir_todo(matriz);
    }
+   else if(matriz[y-2][x]==7 && matriz[y-1][x]==2){
+    matriz[y-2][x]={8};
+    imprimir_todo(matriz);
+    Sleep(200);
+    matriz[y-2][x]={0};
+    imprimir_todo(matriz);
+    matriz[y-1][x]={2};
+    puntuacion +=100;
+    imprimir_todo(matriz);
+   }
    else if(matriz[y-2][x]==7){
    matriz[y-2][x] = {8};
-   matriz[y-1][x] = {0};
    imprimir_todo(matriz);
    Sleep(200);
    matriz[y-2][x] = {0};
-   puntuacion +=100;
+   matriz[y-1][x] = {0};
    imprimir_todo(matriz);
+   puntuacion +=100;
+   }
 
-}
+
+
 }
 void balaizquierda2(double matriz[25][80],int x, int y, int &puntuacion){
 
     int ch;
     bool disparo=true;
-    do{
+    while(disparo && x>5 && matriz[y][x-2] == 0){
             halfdelay(1);
             if(matriz[y][x-1]==4)
             matriz[y][x-1]=0;
@@ -256,8 +279,12 @@ void balaizquierda2(double matriz[25][80],int x, int y, int &puntuacion){
             ch = getch();
             matriz[y][x-1] = 4;
             imprimir_todo(matriz);
-    }while(disparo && x>5 && matriz[y][x-2] == 0);
-   if(matriz[y][x-2]==1){
+    }
+   if(matriz[y][x-2]==1 && matriz[y][x-1]==2){
+    matriz[y][x-1]={2};
+    imprimir_todo(matriz);
+   }
+   else if(matriz[y][x-2]==1){
    Sleep(200);
    matriz[y][x-1] = {8};
    imprimir_todo(matriz);
@@ -265,15 +292,24 @@ void balaizquierda2(double matriz[25][80],int x, int y, int &puntuacion){
    matriz[y][x-1] = {0};
    imprimir_todo(matriz);
    }
+   else if(matriz[y][x-2]==7 && matriz[y][x-1]==2){
+    matriz[y][x-2]={8};
+    imprimir_todo(matriz);
+    Sleep(200);
+    matriz[y][x-2]={0};
+    imprimir_todo(matriz);
+    matriz[y][x-1]={2};
+    puntuacion +=100;
+    imprimir_todo(matriz);
+   }
    else if(matriz[y][x-2]==7){
    matriz[y][x-2] = {8};
-   matriz[y][x-1] = {0};
    imprimir_todo(matriz);
    Sleep(200);
    matriz[y][x-2] = {0};
-   puntuacion +=100;
+   matriz[y][x-1] = {0};
    imprimir_todo(matriz);
-
+   puntuacion +=100;
    }
 
 
@@ -283,7 +319,7 @@ void baladerecha2(double matriz[25][80], int x, int y, int &puntuacion){
     int ch;
     bool disparo=true;
 
-    do{
+    while(disparo && matriz[y][x+2] == 0){
             halfdelay(1);
             if(matriz[y][x+1]==5)
             matriz[y][x+1]=0;
@@ -292,8 +328,12 @@ void baladerecha2(double matriz[25][80], int x, int y, int &puntuacion){
             ch = getch();
             matriz[y][x+1] = 5;
             imprimir_todo(matriz);
-    }while(disparo && matriz[y][x+2] == 0);
-   if(matriz[y][x+2]==1){
+    }
+   if(matriz[y][x+2]==1 && matriz[y][x+1]==2){
+    matriz[y][x+1]={2};
+    imprimir_todo(matriz);
+   }
+   else if(matriz[y][x+2]==1){
    Sleep(200);
    matriz[y][x+1] = {8};
    imprimir_todo(matriz);
@@ -301,21 +341,31 @@ void baladerecha2(double matriz[25][80], int x, int y, int &puntuacion){
    matriz[y][x+1] = {0};
    imprimir_todo(matriz);
    }
+   else if(matriz[y][x+2]==7 && matriz[y][x+1]==2){
+    matriz[y][x+2]={8};
+    imprimir_todo(matriz);
+    Sleep(200);
+    matriz[y][x+2]={0};
+    imprimir_todo(matriz);
+    matriz[y][x+1]={2};
+    puntuacion +=100;
+    imprimir_todo(matriz);
+   }
    else if(matriz[y][x+2]==7){
    matriz[y][x+2] = {8};
-   matriz[y][x+1] = {0};
    imprimir_todo(matriz);
    Sleep(200);
    matriz[y][x+2] = {0};
-   puntuacion +=100;
+   matriz[y][x+1] = {0};
    imprimir_todo(matriz);
+   puntuacion +=100;
    }
 }
 void balaabajo2(double matriz[25][80], int x, int y, int &puntuacion){
 
     int ch;
     bool disparo=true;
-    do{
+    while(disparo && y<19 && matriz[y+2][x] == 0){
             halfdelay(1);
             if(matriz[y+1][x]==6)
             matriz[y+1][x]=0;
@@ -324,9 +374,12 @@ void balaabajo2(double matriz[25][80], int x, int y, int &puntuacion){
             ch = getch();
             matriz[y+1][x] = 6;
             imprimir_todo(matriz);
-    }while(disparo && y<19 && matriz[y+2][x] == 0);
-
-   if(matriz[y+2][x]==1){
+    }
+   if(matriz[y+2][x]==1 && matriz[y+1][x]==2){
+    matriz[y+1][x]={2};
+    imprimir_todo(matriz);
+   }
+   else if(matriz[y+2][x]==1){
    Sleep(200);
    matriz[y+1][x] = {8};
    imprimir_todo(matriz);
@@ -334,14 +387,24 @@ void balaabajo2(double matriz[25][80], int x, int y, int &puntuacion){
    matriz[y+1][x] = {0};
    imprimir_todo(matriz);
    }
+   else if(matriz[y+2][x]==7 && matriz[y+1][x]==2){
+    matriz[y+2][x]={8};
+    imprimir_todo(matriz);
+    Sleep(200);
+    matriz[y+2][x]={0};
+    imprimir_todo(matriz);
+    matriz[y+1][x]={2};
+    puntuacion +=100;
+    imprimir_todo(matriz);
+   }
    else if(matriz[y+2][x]==7){
    matriz[y+2][x] = {8};
-   matriz[y+1][x] = {0};
    imprimir_todo(matriz);
    Sleep(200);
    matriz[y+2][x] = {0};
-   puntuacion +=100;
+   matriz[y+1][x] = {0};
    imprimir_todo(matriz);
+   puntuacion +=100;
    }
 }
 void enemigos(double matriz[25][80],int nivel,int &enemigos_matar){
@@ -388,13 +451,13 @@ void juego2(double matriz[25][80], bool &juego, int &puntuacion, int enemigos_ma
         matriz[11][39] = 2;
         matriz[13][39] = 2;
         imprimir_todo(matriz);
-        mvprintw(1,34,"NIVEL: %d",nivel);
 
     while (release)
     {
        /* mvprintw(2,34,"Y: %d",y);                 //Funcion coordenada
         mvprintw(2,40,"X: %d",x);
        */
+        mvprintw(1,34,"NIVEL: %d",nivel);
         mvprintw(1,60, "Puntuacion: %d",puntuacion);
 
         attron(COLOR_PAIR(2));
@@ -560,8 +623,214 @@ void juego2(double matriz[25][80], bool &juego, int &puntuacion, int enemigos_ma
         }
         if (vida == 0)
         {
-            release = false;
-            juego = false;
+            clear();
+            attron(COLOR_PAIR(3));
+        mvaddch(5,15,ACS_DIAMOND);
+        mvaddch(5,14,ACS_DIAMOND);
+        mvaddch(5,13,ACS_DIAMOND);
+        mvaddch(5,12,ACS_DIAMOND);
+        mvaddch(5,11,ACS_DIAMOND);
+        mvaddch(5,10,ACS_DIAMOND);
+        mvaddch(6,10,ACS_DIAMOND);
+        mvaddch(7,10,ACS_DIAMOND);
+        mvaddch(8,10,ACS_DIAMOND);
+        mvaddch(9,10,ACS_DIAMOND);
+        mvaddch(10,10,ACS_DIAMOND);
+        mvaddch(11,10,ACS_DIAMOND);
+        mvaddch(11,11,ACS_DIAMOND);
+        mvaddch(11,12,ACS_DIAMOND);
+        mvaddch(11,13,ACS_DIAMOND);
+        mvaddch(11,14,ACS_DIAMOND);
+        mvaddch(11,15,ACS_DIAMOND);
+        mvaddch(10,15,ACS_DIAMOND);
+        mvaddch(9,15,ACS_DIAMOND);
+        mvaddch(8,15,ACS_DIAMOND);
+        mvaddch(8,14,ACS_DIAMOND);
+        mvaddch(8,13,ACS_DIAMOND);
+
+        //LETRA A
+
+        mvaddch(11,17,ACS_DIAMOND);
+        mvaddch(10,17,ACS_DIAMOND);
+        mvaddch(9,17,ACS_DIAMOND);
+        mvaddch(8,17,ACS_DIAMOND);
+        mvaddch(7,17,ACS_DIAMOND);
+        mvaddch(6,17,ACS_DIAMOND);
+        mvaddch(5,17,ACS_DIAMOND);
+        mvaddch(5,18,ACS_DIAMOND);
+        mvaddch(5,19,ACS_DIAMOND);
+        mvaddch(5,20,ACS_DIAMOND);
+        mvaddch(5,21,ACS_DIAMOND);
+        mvaddch(5,22,ACS_DIAMOND);
+        mvaddch(6,22,ACS_DIAMOND);
+        mvaddch(7,22,ACS_DIAMOND);
+        mvaddch(8,22,ACS_DIAMOND);
+        mvaddch(9,22,ACS_DIAMOND);
+        mvaddch(10,22,ACS_DIAMOND);
+        mvaddch(11,22,ACS_DIAMOND);
+        mvaddch(8,22,ACS_DIAMOND);
+        mvaddch(8,21,ACS_DIAMOND);
+        mvaddch(8,20,ACS_DIAMOND);
+        mvaddch(8,19,ACS_DIAMOND);
+        mvaddch(8,18,ACS_DIAMOND);
+
+        //letra M
+        mvaddch(5,25,ACS_DIAMOND);
+        mvaddch(6,25,ACS_DIAMOND);
+        mvaddch(7,25,ACS_DIAMOND);
+        mvaddch(8,25,ACS_DIAMOND);
+        mvaddch(9,25,ACS_DIAMOND);
+        mvaddch(10,25,ACS_DIAMOND);
+        mvaddch(11,25,ACS_DIAMOND);
+        mvaddch(6,26,ACS_DIAMOND);
+        mvaddch(7,27,ACS_DIAMOND);
+        mvaddch(8,28,ACS_DIAMOND);
+        mvaddch(7,29,ACS_DIAMOND);
+        mvaddch(6,30,ACS_DIAMOND);
+        mvaddch(5,31,ACS_DIAMOND);
+        mvaddch(6,31,ACS_DIAMOND);
+        mvaddch(7,31,ACS_DIAMOND);
+        mvaddch(8,31,ACS_DIAMOND);
+        mvaddch(9,31,ACS_DIAMOND);
+        mvaddch(10,31,ACS_DIAMOND);
+        mvaddch(11,31,ACS_DIAMOND);
+
+        //letra E
+
+        mvaddch(5,34,ACS_DIAMOND);
+        mvaddch(5,35,ACS_DIAMOND);
+        mvaddch(5,36,ACS_DIAMOND);
+        mvaddch(5,37,ACS_DIAMOND);
+        mvaddch(5,38,ACS_DIAMOND);
+        mvaddch(5,39,ACS_DIAMOND);
+        mvaddch(6,34,ACS_DIAMOND);
+        mvaddch(7,34,ACS_DIAMOND);
+        mvaddch(8,34,ACS_DIAMOND);
+        mvaddch(9,34,ACS_DIAMOND);
+        mvaddch(10,34,ACS_DIAMOND);
+        mvaddch(11,34,ACS_DIAMOND);
+        mvaddch(11,35,ACS_DIAMOND);
+        mvaddch(11,36,ACS_DIAMOND);
+        mvaddch(11,37,ACS_DIAMOND);
+        mvaddch(11,38,ACS_DIAMOND);
+        mvaddch(11,39,ACS_DIAMOND);
+        mvaddch(8,35,ACS_DIAMOND);
+        mvaddch(8,36,ACS_DIAMOND);
+        mvaddch(8,37,ACS_DIAMOND);
+        mvaddch(8,38,ACS_DIAMOND);
+        mvaddch(8,39,ACS_DIAMOND);
+
+        //LETRA O
+
+        mvaddch(14,17,ACS_DIAMOND);
+        mvaddch(15,17,ACS_DIAMOND);
+        mvaddch(16,17,ACS_DIAMOND);
+        mvaddch(17,17,ACS_DIAMOND);
+        mvaddch(18,17,ACS_DIAMOND);
+        mvaddch(19,17,ACS_DIAMOND);
+        mvaddch(20,17,ACS_DIAMOND);
+        mvaddch(20,18,ACS_DIAMOND);
+        mvaddch(20,19,ACS_DIAMOND);
+        mvaddch(20,20,ACS_DIAMOND);
+        mvaddch(20,21,ACS_DIAMOND);
+        mvaddch(20,22,ACS_DIAMOND);
+        mvaddch(19,22,ACS_DIAMOND);
+        mvaddch(18,22,ACS_DIAMOND);
+        mvaddch(17,22,ACS_DIAMOND);
+        mvaddch(16,22,ACS_DIAMOND);
+        mvaddch(15,22,ACS_DIAMOND);
+        mvaddch(14,22,ACS_DIAMOND);
+        mvaddch(14,21,ACS_DIAMOND);
+        mvaddch(14,20,ACS_DIAMOND);
+        mvaddch(14,19,ACS_DIAMOND);
+        mvaddch(14,18,ACS_DIAMOND);
+
+        //LETRA V
+
+        mvaddch(14,25,ACS_DIAMOND);
+        mvaddch(15,25,ACS_DIAMOND);
+        mvaddch(16,26,ACS_DIAMOND);
+        mvaddch(17,26,ACS_DIAMOND);
+        mvaddch(18,27,ACS_DIAMOND);
+        mvaddch(19,27,ACS_DIAMOND);
+        mvaddch(20,28,ACS_DIAMOND);
+        mvaddch(19,29,ACS_DIAMOND);
+        mvaddch(18,29,ACS_DIAMOND);
+        mvaddch(17,30,ACS_DIAMOND);
+        mvaddch(16,30,ACS_DIAMOND);
+        mvaddch(15,31,ACS_DIAMOND);
+        mvaddch(14,31,ACS_DIAMOND);
+
+        //LETRA E
+
+        mvaddch(14,34,ACS_DIAMOND);
+        mvaddch(15,34,ACS_DIAMOND);
+        mvaddch(16,34,ACS_DIAMOND);
+        mvaddch(17,34,ACS_DIAMOND);
+        mvaddch(18,34,ACS_DIAMOND);
+        mvaddch(19,34,ACS_DIAMOND);
+        mvaddch(20,34,ACS_DIAMOND);
+        mvaddch(14,35,ACS_DIAMOND);
+        mvaddch(14,36,ACS_DIAMOND);
+        mvaddch(14,37,ACS_DIAMOND);
+        mvaddch(14,38,ACS_DIAMOND);
+        mvaddch(14,39,ACS_DIAMOND);
+        mvaddch(17,35,ACS_DIAMOND);
+        mvaddch(17,36,ACS_DIAMOND);
+        mvaddch(17,37,ACS_DIAMOND);
+        mvaddch(17,38,ACS_DIAMOND);
+        mvaddch(17,39,ACS_DIAMOND);
+        mvaddch(20,35,ACS_DIAMOND);
+        mvaddch(20,36,ACS_DIAMOND);
+        mvaddch(20,37,ACS_DIAMOND);
+        mvaddch(20,38,ACS_DIAMOND);
+        mvaddch(20,39,ACS_DIAMOND);
+
+        //LETRA R
+
+        mvaddch(14,42,ACS_DIAMOND);
+        mvaddch(15,42,ACS_DIAMOND);
+        mvaddch(16,42,ACS_DIAMOND);
+        mvaddch(17,42,ACS_DIAMOND);
+        mvaddch(18,42,ACS_DIAMOND);
+        mvaddch(19,42,ACS_DIAMOND);
+        mvaddch(20,42,ACS_DIAMOND);
+        mvaddch(14,43,ACS_DIAMOND);
+        mvaddch(14,44,ACS_DIAMOND);
+        mvaddch(14,45,ACS_DIAMOND);
+        mvaddch(14,46,ACS_DIAMOND);
+        mvaddch(14,47,ACS_DIAMOND);
+        mvaddch(15,47,ACS_DIAMOND);
+        mvaddch(16,47,ACS_DIAMOND);
+        mvaddch(17,47,ACS_DIAMOND);
+        mvaddch(17,46,ACS_DIAMOND);
+        mvaddch(17,45,ACS_DIAMOND);
+        mvaddch(17,44,ACS_DIAMOND);
+        mvaddch(17,43,ACS_DIAMOND);
+        mvaddch(18,45,ACS_DIAMOND);
+        mvaddch(19,46,ACS_DIAMOND);
+        mvaddch(20,47,ACS_DIAMOND);
+
+        attroff(COLOR_PAIR(3));
+        //logo SMX
+        attron(COLOR_PAIR(5));
+
+        mvprintw(8,54,"xxxx    xxxx");
+        mvprintw(9,55,  "xxx    xxx");
+        mvprintw(10,55,  " xx    xx");
+        mvprintw(11,55,  "  xx  xx");
+        mvprintw(12,55, "    xx");
+        mvprintw(13,55, "  xx  xx");
+        mvprintw(14,55, " xx    xx");
+        mvprintw(15,55, "xxx    xxx");
+        mvprintw(16,54,"xxxx    xxxx");
+        attroff(COLOR_PAIR(5));
+
+        mvprintw(21,52,"PUNTUACION FINAL = %d",puntuacion);
+        refresh();
+        Sleep(2000);
+        release = false;
+        juego = false;
         }
         if (puntuacion - puntuacion_inicial == enemigos_matar)
         {
@@ -939,7 +1208,7 @@ int main()
     keypad(stdscr, TRUE);
     noecho();
     nodelay(stdscr,1);
-
+    bool avance = true;
 
     start_color();
     init_pair(1,COLOR_GREEN,COLOR_BLACK);
@@ -951,6 +1220,30 @@ int main()
     init_pair(6,COLOR_MAGENTA,COLOR_BLACK);
 
 //Funciones
+    while (avance)
+        {
+           int ch = getch();
+
+    attron(COLOR_PAIR(3));
+    mvprintw(8,12,"   LUEGO DE LA INFAME GUERRA MUNDIAL DE LOS CARACTERES");
+    mvprintw(9,12,"            SOLOS DOS RAZAS SOBREVIVIERON.");
+    mvprintw(10,12,"ESTAS DOS RAZAS, AHORA LUCHAN PARA GANAR LA SOBERANIA SUPREMA.");
+    mvprintw(11,12,"     LOS CARACTERES ( X ) CONTRA LOS CARACTERES ( + )                ");
+    mvprintw(12,12,"  FUERON PROTAGONISTAS DE DICHA LUCHA POR LA GLORIA.");
+
+    mvprintw(13,12,"EL TIEMPO TRANSCURRIA, Y LA SUPERIORIDAD NUMERICA DE LAS ( X )  ");
+    mvprintw(14,12,"              PROVOCO LA CAIDA DEL 99% DE LAS ( + )");
+    mvprintw(15,12,"                       SIN EMBARGO...");
+    mvprintw(16,12," UN ULTIMO GUERRERO SE NIEGA A CAER, VIVIENDO SU PROPIA LUCHA");
+    mvprintw(17,12,"                  EN BUSCA DE VENGANZA...");
+
+    attroff(COLOR_PAIR(3));
+
+    mvprintw(23,22,"Presione ENTER para continuar.");
+
+           if (ch == '\n')
+                avance = false;
+        }
 
     while(exit)
     {
@@ -959,12 +1252,14 @@ int main()
         bool juego = false;
         bool creditos = false;
         bool controles = false;
+        bool bio = false;
+        bool bio2 = false;
         int nivel = 1;
         int escenario = 1;
         double matriz[25][80]={0};
         clear();
         marco2(matriz);
-        menu(matriz,exit,juego,creditos,controles);
+        menu(matriz,exit,juego,creditos,controles,bio);
         while (juego)
         {
         marco2(matriz);                               //Aca se podria poner un contador de nivel onda nivel = 1 y con ++ al final para usarlo en la funcion de
@@ -990,11 +1285,94 @@ int main()
         juego2(matriz,juego,puntuacion,enemigos_matar,nivel);
         nivel++;
         }
+        while (bio){
+
+                int ch = getch();
+
+    attron(COLOR_PAIR(2));
+    mvprintw(5,12, "                   -BIOGRAFIA-        ");
+    attroff(COLOR_PAIR(2));
+
+    attron(COLOR_PAIR(1));
+    mvprintw(6,12, " .............                    ");
+    mvprintw(7,12, " .           .                    ");
+    mvprintw(8,12, " .           .                    ");
+    mvprintw(9,12, " .           .   <MASTER CROSS>   ");
+    mvprintw(10,12," .           .                    ");
+    mvprintw(11,12," .           .                    ");
+    mvprintw(12,12," .............                               ");
+    mvprintw(13,12,"                                            ");
+    mvprintw(14,12," >Ultimo sobreviviente de los ( + )                    ");
+    mvprintw(15,12," >Gran guerrero dotado de un arma multidireccional   ");
+    mvprintw(16,12," >Protagonista y heroe de SMX");
+    attroff(COLOR_PAIR(1));
+
+    attron(COLOR_PAIR(3));
+    mvaddch(9,19,ACS_DIAMOND);
+    mvaddch(8,19,ACS_DIAMOND);
+    mvaddch(9,18,ACS_DIAMOND);
+    mvaddch(9,20,ACS_DIAMOND);
+    mvaddch(10,19,ACS_DIAMOND);
+    attroff(COLOR_PAIR(3));
+
+    mvprintw(23,22,"Presione ENTER para continuar.");
+
+           if (ch == '\n')
+                bio2 = true;
+
+        while (bio2){
+                int ch = getch();
+                attron(COLOR_PAIR(2));
+    mvprintw(5,12, "                   -BIOGRAFIA-        ");
+attroff(COLOR_PAIR(2));
+
+attron(COLOR_PAIR(1));
+    mvprintw(6,12, " .............                    ");
+    mvprintw(7,12, " .           .                    ");
+    mvprintw(8,12, " .           .                    ");
+    mvprintw(9,12, " .           .    < X CHAR >   ");
+    mvprintw(10,12," .           .                    ");
+    mvprintw(11,12," .           .                    ");
+    mvprintw(12,12," .............                               ");
+    mvprintw(13,12,"                                            ");
+    mvprintw(14,12," >Unidad principal de la faccion ( X )  ");
+    mvprintw(15,12," >Generalmente son muchos, y atacan en masa");
+    mvprintw(16,12," >Carecen de inteligencia, solo los mueve su sed de sangre");
+attroff(COLOR_PAIR(1));
+
+attron(COLOR_PAIR(5));
+    mvprintw(9,19, "X");
+    attroff(COLOR_PAIR(5));
+
+    mvprintw(23,22,"Presione ENTER para volver al menu.");
+
+      if (ch == '\n')
+                bio2 = false;
+                bio = false;
+        }
+        }
         while (creditos)
         {
            int ch = getch();
-           mvprintw(20,20,"Escribir Creditos, algo como esto.");
-           mvprintw(21,20,"Apreta Esc para salir.");
+           attron(COLOR_PAIR(5));
+          mvprintw(4,16,"                   -CREDITOS-");
+          attroff(COLOR_PAIR(5));
+          attron(COLOR_PAIR(1));
+          mvprintw(6,16,"Desarrollado por: ");
+          attroff(COLOR_PAIR(1));
+
+          mvprintw(8,16, "Jose Ignacio Smith");
+          mvprintw(9,16, "Carlos Vidal Diaz");
+          mvprintw(10,16, "Gabriel Colin Collao");
+          attron(COLOR_PAIR(3));
+          mvprintw(13,16,"Shot Many X (R) es una marca registrada, la aplicacion");
+          mvprintw(14,16,"fue desarrollada a fin de presentar un proyecto para el");
+          mvprintw(15,16,"ramo de PROGRAMACION, usando la libreria ncurses.");
+          attroff(COLOR_PAIR(3));
+          attron(COLOR_PAIR(2));
+          mvprintw(18,16,"    ------FACULTAD DE INGENIERIA UDP------");
+          attroff(COLOR_PAIR(2));
+           mvprintw(21,20,"         Apreta Esc para salir.");
            if (ch == 27)
                 creditos = false;
         }
