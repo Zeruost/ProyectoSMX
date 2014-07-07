@@ -177,7 +177,7 @@ void menu(double matriz[25][80], bool &exit, bool &juego, bool &creditos, bool &
         mvaddch(y, x, ACS_RARROW);//FLECHA
     attroff(COLOR_PAIR(1));
         ch = getch();
-        if (ch == KEY_DOWN && y<16)
+        if (ch == KEY_DOWN && y<17)
         {
             mvprintw(y, x, " ");
             y++;
